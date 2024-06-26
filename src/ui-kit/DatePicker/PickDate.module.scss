@@ -1,0 +1,44 @@
+@import '../../variables';
+
+.calendar {
+  font-family: Redcollar sans-serif;
+  font-size: 18px;
+  border: none;
+}
+
+.disabled {
+  color: $gray;
+}
+
+.calendarTextField {
+  border: 1px solid $gray;
+  border-radius: 4px;
+  width: 320px;
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-top: 4px;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  color: $gray;
+  padding: 10px;
+}
+
+.dayMonthHeader {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dateSelect {
+  border: none;
+  font-family: Montserrat sans-serif $gray;
+  text-transform: capitalize;
+}
+
+.datepickerButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

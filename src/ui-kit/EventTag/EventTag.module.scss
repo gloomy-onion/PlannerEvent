@@ -1,0 +1,30 @@
+@import '../../variables';
+
+.event {
+  border: none;
+  border-radius: 8px;
+  height: 32px;
+  padding: 2px 6px;
+  display: flex;
+  flex-direction: row;
+  background: $lightGray;
+  align-items: center;
+}
+
+.eventStar {
+  margin-right: 5px;
+}
+.created{
+background: $red;
+}
+.dot {
+  content:'';
+  height: 8px;
+  width: 8px;
+  background-color: $red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+

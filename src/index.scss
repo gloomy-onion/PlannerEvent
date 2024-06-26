@@ -1,0 +1,24 @@
+@import "../normalize.css";
+@import "./variables.scss";
+
+@font-face {
+  font-weight: 400;
+  font-family: 'TTCommons';
+  src: local('TTCommons'), url("assets/fonts/TTCommons-Medium.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-weight: 500;
+  font-family: 'TTCommons';
+  src: local('TTCommons'), url("assets/fonts/TTCommons-DemiBold.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-weight: 400;
+  font-family: 'Redcollar';
+  src: local('Redcollar'), url("assets/fonts/Redcollar.ttf") format("truetype");
+  font-style: normal;
+  font-display: auto;
+}

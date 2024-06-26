@@ -1,0 +1,28 @@
+@import '../../variables';
+
+.TTCommons {
+  font-family: TTCommons, sans-serif;
+}
+
+.redCollar{
+  font-family: Redcollar, sans-serif;
+}
+.red {
+  color: $red;
+}
+
+.black {
+  color: $black;
+}
+
+.gray {
+  color: $gray;
+}
+
+.white {
+  color: $white;
+}
+
+.upperCase {
+  text-transform: uppercase;
+}

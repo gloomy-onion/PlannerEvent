@@ -1,0 +1,109 @@
+@import '../../variables';
+
+button {
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 19px 13px;
+  cursor: pointer;
+}
+
+button:disabled,
+button[disabled] {
+  animation: none;
+  opacity: 0.5;
+  transition: none;
+  cursor: not-allowed;
+  transform: none;
+  border: none;
+  color: $gray;
+  background: $lightGray;
+}
+
+button:active:not([disabled]) {
+  transform: scale(.99)
+}
+
+.outlineBlack {
+  justify-content: center;
+  height: 60px;
+  padding: 21px 32px;
+  align-items: center;
+  background: none;
+  border: 1px solid $black;
+  border-radius: 12px;
+}
+
+.outlineBlack:hover:not([disabled]) {
+  box-shadow: 0 0 10px 0 $black inset;
+  transform: scale(1.01)
+}
+
+.outlineBlack:active:not([disabled]) {
+  transform: scale(.99)
+}
+
+.filledBlack {
+  align-items: center;
+  width: 124px;
+  height: 60px;
+  border-radius: 12px;
+  border: none;
+  background: $black;
+  color: white;
+  padding: 21px 32px;
+  justify-content: center;
+}
+
+
+.filledBlack:hover:not([disabled]) {
+  box-shadow: 0 0 3px 0 $black;
+  transform: scale(1.01)
+}
+
+.filledBlack:active:not([disabled]) {
+  transform: scale(.99)
+}
+.outlineRed {
+  justify-content: center;
+  width: 124px;
+  height: 60px;
+  padding: 21px 32px;
+  align-items: center;
+  background: none;
+  border: 1px solid $red;
+  border-radius: 12px;
+}
+
+.outlineRed:hover:not([disabled]) {
+  box-shadow: 0 0 3px 0 $red inset;
+  transform: scale(1.01)
+}
+
+.outlineRed:active:not([disabled]) {
+  transform: scale(.96)
+}
+
+.filledRed {
+  align-items: center;
+  width: 124px;
+  height: 60px;
+  border-radius: 12px;
+  border: none;
+  background: $red;
+  color: white;
+  padding: 21px 32px;
+  justify-content: center;
+}
+
+
+.filledRed:hover:not([disabled]) {
+  box-shadow: 0 0 3px 0 $red;
+  transform: scale(1.01)
+}
+
+.filledRed:active:not([disabled]) {
+  transform: scale(.99)
+}
