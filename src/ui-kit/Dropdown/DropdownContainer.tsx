@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
 import styles from './Dropdown.module.scss';
+import { ReactComponent as CalendarIcon } from '../../assets/img/CalendarIcon.svg';
 import { Typography } from '../Typography/Typography';
-import { ReactComponent as CalendarIcon } from './../../assets/img/CalendarIcon.svg';
 
 type DropdownProps = {
   label?: string;
   children?: React.ReactNode;
   value?: string | null;
-  placeholder?: string | null;
   open?: boolean;
   setOpen: (value: boolean) => void;
   onClick?: () => void;
@@ -16,7 +15,7 @@ type DropdownProps = {
 
 type ComposedPath = () => Node[];
 
-export const DropdownContainer = ({ label, children, value, placeholder, open, setOpen, onClick }: DropdownProps) => {
+export const DropdownContainer = ({ label, children, value, open, setOpen, onClick }: DropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropDown = () => {
@@ -50,7 +49,7 @@ export const DropdownContainer = ({ label, children, value, placeholder, open, s
             toggleDropDown();
           }}
         >
-          {!value && (
+          {value ? (
             <Typography
               color={'gray'}
               style={{
@@ -62,6 +61,8 @@ export const DropdownContainer = ({ label, children, value, placeholder, open, s
             >
               {label}
             </Typography>
+          ) : (
+            <Typography color={'gray'}>{label}</Typography>
           )}
           {value && (
             <Typography color={'black'} size={'l'}>

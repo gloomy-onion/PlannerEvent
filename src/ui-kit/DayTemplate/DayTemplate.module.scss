@@ -1,0 +1,17 @@
+@import '../../variables';
+
+.day{ }
+
+.weekday{
+  width: 229px;
+  height: 131px;
+  background: $white;
+  border: 1px $gray inset solid;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 20px 10px;
+}
+.weekend{
+  background: $grayBackground;
+}

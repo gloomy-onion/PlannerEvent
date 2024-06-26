@@ -7,20 +7,6 @@
   width: 100%;
 }
 
-.textFieldInput {
-  border: none;
-  background-image: none;
-  background-color: transparent;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  width: 100%;
-  padding: 18px 16px;
-  font-family: TTCommons, sans-serif;
-  font-size: 18px;
-  color: $black;
-}
-
 .textFieldInputCover {
   border-radius: 12px;
   width: 100%;
@@ -30,9 +16,6 @@
   position: relative;
 }
 
-.textFieldInput::placeholder {
-  color: $gray;
-}
 
 input[type='date'] {
   font-family: TTCommons, sans-serif;
@@ -75,15 +58,6 @@ input[type='date']::placeholder {
   height: 2px;
   background-color: $gray;
   transform: rotate(45deg);
-}
-
-.floatingLabel {
-  position: absolute;
-  top: 10px;
-  left: 16px;
-  font-size: 16px;
-  color: #999;
-  transition: top 0.2s ease-in-out, font-size 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .floatingInput {
