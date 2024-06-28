@@ -27,7 +27,7 @@ export const Button = ({
       onClick={(event) => onClick && onClick(event)}
       style={{ width }}
     >
-      <Typography as={'h4'} weight={400} color={getLabelColor(buttonType, disabled)} size={'m'} font={'redCollar'}>
+      <Typography as={'h4'} weight={400} color={getLabelColor(buttonType, disabled)} size={'m'} font={'RedCollar'}>
         {label}
       </Typography>
     </button>

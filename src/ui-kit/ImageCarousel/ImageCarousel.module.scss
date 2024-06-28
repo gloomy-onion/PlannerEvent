@@ -1,0 +1,154 @@
+@import '../../variables';
+
+.carouselContainer {
+  width: 947px;
+  height: 276px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carouselHead {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.carouselItem {
+  overflow: hidden;
+  width: 267px;
+  height: 160px;
+  margin: 5px;
+  border-radius: 24px;
+  opacity: 0.7;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.floatingImages {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.carouselItemActive {
+  opacity: 1;
+}
+
+.carouselButtons {
+  width: 136px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.carouselNext {
+  width: 64px;
+  height: 48px;
+  border: none;
+  background: $lightGray;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.carouselNext:after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  transform: rotate(45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+}
+
+.carouselNext:before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: rotate(-45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+}
+
+.carouselPrev {
+  width: 64px;
+  height: 48px;
+  border: none;
+  background: $lightGray;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.carouselPrev:after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  transform: rotate(45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+  position: absolute;
+  top: 20%;
+  left: 45%;
+}
+
+.carouselPrev:before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  transform: rotate(-45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+}
+
+.carouselDot {
+  background: $lightGray;
+  width: 32px;
+  height: 4px;
+  border: none;
+  border-radius: 30px;
+  content: '';
+}
+
+.carouselDotActive {
+  background: $red;
+  width: 32px;
+  height: 4px;
+  border: none;
+  border-radius: 30px;
+  content: '';
+}
+
+.carouselDots {
+  width: 164px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  top: 130px;
+  right: 10px;
+}

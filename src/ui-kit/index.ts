@@ -6,3 +6,6 @@ export { DropdownDatePickers } from './DropownDatePickers/DropdownDatePickers';
 export { DayTemplate } from './DayTemplate/DayTemplate';
 export { Information } from './Information/Information';
 export { Description } from './Description/Description';
+export { AddPhoto } from './AddPhoto/AddPhoto';
+export { ImageCarousel } from './ImageCarousel/ImageCarousel';
+export { Participant } from './Participant/Participant';
