@@ -1,0 +1,17 @@
+@import '../../variables';
+
+.eventDatePlaceContainer {
+  width: 212px;
+  height: 144px;
+  background: $grayBackground;
+  display: flex;
+  border-radius: 24px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px 12px 15px 16px;
+}
+
+.dateTime {
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid $lightGray ;
+}

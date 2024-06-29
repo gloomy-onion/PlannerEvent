@@ -9,6 +9,7 @@ const sizeMap = {
   m: '18px',
   l: '20px',
   xl: '24px',
+  xxl: '36px',
 };
 
 export const Typography = ({

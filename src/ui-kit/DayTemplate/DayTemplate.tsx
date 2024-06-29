@@ -1,8 +1,9 @@
 import React from 'react';
 
 import styles from './DayTemplate.module.scss';
-import { Typography } from '../Typography/Typography';
+
 import cn from 'classnames';
+import { Typography } from '../Typography/Typography';
 
 type DayTemplateProps = {
   children?: React.ReactNode;

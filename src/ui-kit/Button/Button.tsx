@@ -7,7 +7,7 @@ import { Typography } from '../Typography/Typography';
 
 type ButtonProps = {
   disabled?: boolean;
-  buttonType?: 'filledBlack' | 'filledRed' | 'outlineBlack' | 'outlineRed' | 'previous' | 'next';
+  buttonType?: 'filledBlack' | 'filledRed' | 'outlineBlack' | 'outlineRed' | 'previous' | 'next' | 'close';
   label?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   width?: string;
@@ -18,7 +18,7 @@ export const Button = ({
   disabled = false,
   label,
   onClick,
-  width = '124px',
+  width,
 }: PropsWithChildren<ButtonProps>) => {
   return (
     <button

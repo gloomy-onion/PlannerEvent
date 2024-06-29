@@ -4,11 +4,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .uploadBox {
-  width: 80%;
-  max-width: 580px;
+  width: 580px;
   height: 170px;
   background-color: $white;
   border: 2px dashed $gray;

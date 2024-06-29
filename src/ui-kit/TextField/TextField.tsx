@@ -7,12 +7,12 @@ import { Typography } from '../Typography/Typography';
 
 type TextFieldProps = {
   placeholder?: string;
-  textFieldType?: 'text' | 'password' | 'email';
+  textFieldType?: 'text' | 'password' | 'email' | 'time';
   noticeText?: string;
   label?: string;
 };
 
-export const TextField = ({ placeholder = 'type sth', textFieldType = 'text', noticeText, label }: TextFieldProps) => {
+export const TextField = ({ placeholder, textFieldType = 'text', noticeText, label }: TextFieldProps) => {
   const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -49,6 +49,7 @@ export const TextField = ({ placeholder = 'type sth', textFieldType = 'text', no
             top: isFocused ? '1px' : '20px',
             fontSize: isFocused ? '14px' : '18px',
             position: 'absolute',
+            background: 'white',
           }}
         >
           {label}

@@ -52,7 +52,7 @@ export const Description = ({ label, noticeText }: DescriptionProps) => {
           </Typography>
         )}
         {inputValue.length > 450 && (
-          <Typography size={'s'} weight={400} color={'gray'}>
+          <Typography size={'m'} weight={400} color={'gray'}>
             {inputValue.length}/500
           </Typography>
         )}

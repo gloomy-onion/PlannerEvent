@@ -9,3 +9,5 @@ export { Description } from './Description/Description';
 export { AddPhoto } from './AddPhoto/AddPhoto';
 export { ImageCarousel } from './ImageCarousel/ImageCarousel';
 export { Participant } from './Participant/Participant';
+export { EventDatePlace } from './EventDatePlace/EventDatePlace';
+export { Typography } from './Typography/Typography';

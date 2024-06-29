@@ -72,7 +72,7 @@ export const DropdownContainer = ({ label, children, value, open, setOpen, onCli
           <CalendarIcon />
         </div>
         {open && (
-          <div ref={dropdownRef} className={styles.dropdownExpanded}>
+          <div ref={dropdownRef} className={styles.dropdownExpanded} >
             {children}
           </div>
         )}

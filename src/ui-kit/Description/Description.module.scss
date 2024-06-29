@@ -5,6 +5,7 @@
   flex-direction: column;
   border: none;
   width: 580px;
+  height: 153px;
 }
 
 .descriptionCover {
@@ -25,6 +26,9 @@
   border-radius: 12px;
   transition: border-bottom 0.2s ease-in-out;
   caret-color: $green;
+  font-family: TTCommons, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
 }
 
 .descriptionTextarea:focus {
