@@ -3,10 +3,9 @@
 .day{ }
 
 .weekday{
-  width: 229px;
-  height: 131px;
+  width: 100%;
+  height: 128px;
   background: $white;
-  border: 1px $gray inset solid;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
