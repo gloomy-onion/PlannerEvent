@@ -11,3 +11,4 @@ export { ImageCarousel } from './ImageCarousel/ImageCarousel';
 export { Participant } from './Participant/Participant';
 export { EventDatePlace } from './EventDatePlace/EventDatePlace';
 export { Typography } from './Typography/Typography';
+export { Modal } from './Modal/Modal';

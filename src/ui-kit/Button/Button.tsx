@@ -7,9 +7,9 @@ import { Typography } from '../Typography/Typography';
 
 type ButtonProps = {
   disabled?: boolean;
-  buttonType?: 'filledBlack' | 'filledRed' | 'outlineBlack' | 'outlineRed' | 'previous' | 'next' | 'close';
+  buttonType?: 'filledBlack' | 'filledRed' | 'outlineBlack' | 'outlineRed' | 'previous' | 'next' | 'close' | 'add';
   label?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   width?: string;
 };
 
@@ -24,7 +24,7 @@ export const Button = ({
     <button
       disabled={disabled}
       className={cn(styles.button, styles[buttonType])}
-      onClick={(event) => onClick && onClick(event)}
+      onClick={() => onClick && onClick()}
       style={{ width }}
     >
       <Typography as={'h4'} weight={400} color={getLabelColor(buttonType, disabled)} size={'m'} font={'RedCollar'}>

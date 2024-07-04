@@ -12,4 +12,6 @@ if (!root) {
 
 const container = createRoot(root);
 
-container.render(<App />);
+container.render(
+    <App />
+);

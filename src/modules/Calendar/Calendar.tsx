@@ -1,11 +1,15 @@
 import cn from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { api } from '../../api/api';
 
 import styles from './Calendar.module.scss';
 import { daysInWeek, months } from './constants';
 import { daysInMonth, firstDayOfMonth } from './helpers';
+import Avatar from '../../assets/img/Avatar.png';
 import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { Button, DayTemplate, Typography } from '../../ui-kit';
+import { Auth } from '../Auth/Auth';
 
 type Event = {
   date: string;
@@ -13,14 +17,40 @@ type Event = {
   time?: string;
 };
 
-type Calendar2Props = {
+type CalendarProps = {
   events: Event[];
+  isAuth: boolean;
 };
 
-export const Calendar = ({ events }: Calendar2Props) => {
+export const Calendar = ({ events, isAuth }: CalendarProps) => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth());
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  useEffect(() => {
+    async function getEvents() {
+      try {
+        const response = await api.get('events?pagination[pageSize]=50&populate=*');
+        const {data} = response.data;
+        data.forEach(
+          (event: { owner: object; start: string; dateStart: string; className?: string }) => {
+            event.start = event.dateStart.split('T')[0];
+            if (new Date(event.start) < new Date()) {
+              event.className = 'past';
+            }
+          }
+        );
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getEvents();
+  }, []);
 
   const handlePrevMonth = (): void => {
     if (currentMonth === 0) {
@@ -121,7 +151,16 @@ export const Calendar = ({ events }: Calendar2Props) => {
             <button onClick={handlePrevMonth} className={styles.prevButton} />
             <button onClick={handleNextMonth} className={styles.nextButton} />
           </div>
-          <Button label={'Войти'} />
+          {!isAuth ? (
+            <>
+              <Button label={'Войти'} onClick={openModal}/>
+            </>
+          ) : (
+            <div className={styles.isAuthBlock}>
+              <Button buttonType={'add'} />
+              <img alt={'Avatar'} src={Avatar} width={'80px'} />
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.calendarDays}>
@@ -134,6 +173,7 @@ export const Calendar = ({ events }: Calendar2Props) => {
         </div>
         <div className={cn(styles.body, styles.days)}>{renderCalendar()}</div>
       </div>
+      <Auth isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };
