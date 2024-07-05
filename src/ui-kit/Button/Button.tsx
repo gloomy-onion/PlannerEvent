@@ -7,7 +7,16 @@ import { Typography } from '../Typography/Typography';
 
 type ButtonProps = {
   disabled?: boolean;
-  buttonType?: 'filledBlack' | 'filledRed' | 'outlineBlack' | 'outlineRed' | 'previous' | 'next' | 'close' | 'add';
+  buttonType?:
+    | 'filledBlack'
+    | 'filledRed'
+    | 'outlineBlack'
+    | 'outlineRed'
+    | 'previous'
+    | 'next'
+    | 'close'
+    | 'add'
+    | 'errorClose';
   label?: string;
   onClick?: () => void;
   width?: string;

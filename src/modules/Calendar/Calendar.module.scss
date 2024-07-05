@@ -1,7 +1,6 @@
 @import '../../variables';
 
 .calendar {
-  overflow: hidden;
   margin: 60px;
 }
 .logo {
@@ -14,7 +13,7 @@
   align-items: center;
   padding: 10px;
   margin-bottom: 80px;
-  width: 1800px;
+  width: 100%;
 }
 
 .headerLeft {
@@ -180,6 +179,6 @@
 }
 
 .calendarDays {
-  width: 1800px;
-  height: 821px;
+  width: 100%;
+  height: 100%;
 }

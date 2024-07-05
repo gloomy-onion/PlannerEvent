@@ -1,22 +1,60 @@
 import React from 'react';
 
 import styles from './Registration.module.scss';
-import { Button, Information, TextField, Typography } from '../../ui-kit';
+import { Button, Information, Modal, TextField, Typography } from '../../ui-kit';
 
-export const Registration = () => {
+type RegistrationProps = {
+  name: string;
+  password: string;
+  passwordError: string | null;
+  confirmPassword: string;
+  registerError: string | null;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleRegister: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export const Registration = ({
+  isOpen,
+  onClose,
+  name,
+  password,
+  passwordError,
+  confirmPassword,
+  registerError,
+  handleChange,
+  handleRegister,
+}: RegistrationProps) => {
   return (
-    <div className={styles.registrationContainer}>
-      <div className={styles.closeBtn}>
-        <Button buttonType={'close'} />
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className={styles.registrationContainer}>
+        <div className={styles.closeBtn}>
+          <Button buttonType={'close'} onClick={onClose} />
+        </div>
+        <Typography size={'xxl'} color={'black'} font={'RedCollar'}>
+          Регистрация
+        </Typography>
+        <Information />
+        <TextField textFieldType={'text'} label={'Ваше имя'} value={name} onChange={handleChange} name={'name'}/>
+        <TextField
+          label={'Пароль'}
+          value={password}
+          onChange={handleChange}
+          error={passwordError}
+          textFieldType={'password'}
+          name={'password'}
+        />
+        <TextField
+          label={'Повторить пароль'}
+          value={confirmPassword}
+          onChange={handleChange}
+          error={registerError}
+          textFieldType={'password'}
+          name={'confirmPassword'}
+        />
+        <Button label={'Зарегистрироваться'} buttonType={'filledBlack'} width={'346px'} onClick={handleRegister} />
       </div>
-      <Typography size={'xxl'} color={'black'} font={'RedCollar'}>
-        Регистрация
-      </Typography>
-      <Information />
-      <TextField textFieldType={'email'} label={'E-mail'} />
-      <TextField textFieldType={'password'} label={'Пароль'} />
-      <TextField textFieldType={'password'} label={'Повторить пароль'} />
-      <Button label={'Зарегестрироваться'} buttonType={'filledBlack'} width={'346px'} />
-    </div>
+    </Modal>
   );
 };

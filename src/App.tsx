@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AuthProvider } from './context/AuthContext';
 import { Calendar } from './modules';
 
 const events = [
@@ -9,8 +10,8 @@ const events = [
 
 export const App = () => {
   return (
-    <div>
+    <AuthProvider>
       <Calendar events={events} isAuth={false} />
-    </div>
+    </AuthProvider>
   );
 };

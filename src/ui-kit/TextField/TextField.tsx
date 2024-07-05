@@ -8,36 +8,54 @@ import { Typography } from '../Typography/Typography';
 type TextFieldProps = {
   placeholder?: string;
   textFieldType?: 'text' | 'password' | 'email' | 'time';
-  noticeText?: string;
   label?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string | null;
+  name?: string;
 };
 
-export const TextField = ({ placeholder, textFieldType = 'text', noticeText, label }: TextFieldProps) => {
-  const [inputValue, setInputValue] = useState('');
+export const TextField = ({
+  placeholder,
+  textFieldType = 'text',
+  label,
+  value,
+  onChange,
+  error,
+  name,
+}: TextFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const clickClear = () => {
-    setInputValue('');
-    setIsFocused(false);
-  };
-
   const showPassword = () => {
     setIsShowPassword((prevState) => !prevState);
+  };
+
+  const getInputType = () => {
+    if (textFieldType === 'password') {
+      if (isShowPassword) {
+        return 'text';
+      }
+
+      return 'password';
+    }
+
+    return textFieldType;
   };
 
   return (
     <div className={styles.textField}>
       <div className={styles.textFieldInputCover}>
         <input
-          type={textFieldType === 'password' ? (isShowPassword ? 'text' : 'password') : textFieldType}
+          name={name}
+          type={getInputType()}
           placeholder={isFocused ? placeholder : ''}
           className={styles.floatingInput}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          value={value}
+          onChange={onChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => {
-            if (!inputValue) {
+            if (!value) {
               setIsFocused(false);
             }
           }}
@@ -54,16 +72,21 @@ export const TextField = ({ placeholder, textFieldType = 'text', noticeText, lab
         >
           {label}
         </Typography>
-        {inputValue && textFieldType !== 'password' && <button className={styles.clearButton} onClick={clickClear} />}
-        {textFieldType === 'password' && inputValue && (
+        {value && textFieldType !== 'password' && (
+          <button
+            className={styles.clearButton}
+            onClick={() => onChange && onChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>)}
+          />
+        )}
+        {textFieldType === 'password' && value && (
           <div onClick={showPassword}>
             {isShowPassword ? <OpenEye className={styles.openEye} /> : <ClosedEye className={styles.closedEye} />}
           </div>
         )}
       </div>
-      {noticeText && (
-        <Typography size={'s'} weight={400} color={'gray'}>
-          {noticeText}
+      {error && (
+        <Typography size={'s'} weight={400} color={'red'}>
+          {error}
         </Typography>
       )}
     </div>
