@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import React, { createContext, useState, ReactNode, useContext } from 'react';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 interface User {
   id: number;
   email: string;
   profilePicture: string;
+  userName: string;
 }
 
 interface AuthContextType {
@@ -12,11 +13,11 @@ interface AuthContextType {
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, username: string) => Promise<void>;
   checkUserExists: (email: string) => Promise<boolean>;
 }
 
-const BASE_URL = 'https://planner.rdclr.ru/api/';
+const BASE_URL = 'https://planner.rdclr.ru/api';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -37,13 +38,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [error, setError] = useState<string | null>(null);
 
   const checkUserExists = async (email: string): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
     try {
-      const response: AxiosResponse<{ exists: boolean }> = await api.get(`/users?email=${email}`);
+      await api.get(`/users?email=${email}`);
 
-      return response.data.exists;
+      return true;
     } catch (err) {
       setError('Что-то пошло не так, попробуйте позже');
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +56,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ jwt: string, user: User }> = await api.post('/auth/local', { identifier: email, password });
+      const response: AxiosResponse<{ jwt: string; user: User }> = await api.post('/auth/local', {
+        identifier: email,
+        password,
+      });
       setUser(response.data.user);
       localStorage.setItem('token', response.data.jwt);
     } catch (err: any) {
@@ -65,11 +73,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const register = async (email: string, password: string): Promise<void> => {
+  const register = async (email: string, password: string, username: string): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ jwt: string, user: User }> = await api.post('/auth/local/register', { email, password });
+      const response: AxiosResponse<{ jwt: string; user: User }> = await api.post('/auth/local/register', {
+        email,
+        password,
+        username,
+      });
       setUser(response.data.user);
       localStorage.setItem('token', response.data.jwt);
     } catch (err: any) {

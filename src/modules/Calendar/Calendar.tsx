@@ -1,15 +1,15 @@
 import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 
-import { api } from '../../api/api';
-
 import styles from './Calendar.module.scss';
 import { daysInWeek, months } from './constants';
 import { daysInMonth, firstDayOfMonth } from './helpers';
+import { api } from '../../api/api';
 import Avatar from '../../assets/img/Avatar.png';
 import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { Button, DayTemplate, Typography } from '../../ui-kit';
 import { Auth } from '../Auth/Auth';
+import { CreateEvent } from '../CreateEvent/CreateEvent';
 
 type Event = {
   date: string;
@@ -35,20 +35,19 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
     async function getEvents() {
       try {
         const response = await api.get('events?pagination[pageSize]=50&populate=*');
-        const {data} = response.data;
-        data.forEach(
-          (event: { owner: object; start: string; dateStart: string; className?: string }) => {
-            event.start = event.dateStart.split('T')[0];
-            if (new Date(event.start) < new Date()) {
-              event.className = 'past';
-            }
+        const { data } = response.data;
+        data.forEach((event: { owner: object; start: string; dateStart: string; className?: string }) => {
+          event.start = event.dateStart.split('T')[0];
+          if (new Date(event.start) < new Date()) {
+            event.className = 'past';
           }
-        );
+        });
         console.log(data);
       } catch (error) {
         console.error(error);
       }
     }
+
     getEvents();
   }, []);
 
@@ -152,12 +151,10 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
             <button onClick={handleNextMonth} className={styles.nextButton} />
           </div>
           {!isAuth ? (
-            <>
-              <Button label={'Войти'} onClick={openModal}/>
-            </>
+            <Button label={'Войти'} onClick={openModal} />
           ) : (
             <div className={styles.isAuthBlock}>
-              <Button buttonType={'add'} />
+              <Button buttonType={'add'} onClick={openModal} />
               <img alt={'Avatar'} src={Avatar} width={'80px'} />
             </div>
           )}
@@ -174,6 +171,7 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
         <div className={cn(styles.body, styles.days)}>{renderCalendar()}</div>
       </div>
       <Auth isOpen={isModalOpen} onClose={closeModal} />
+      <CreateEvent isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };

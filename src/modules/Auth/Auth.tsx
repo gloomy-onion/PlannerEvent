@@ -20,7 +20,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
   const { checkUserExists, login, register, error, loading } = useAuth();
   const [step, setStep] = useState<'email' | 'password' | 'register'>('email');
   const [formData, setFormData] = useState({
-    name: '',
+    userName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -60,6 +60,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
     }
 
     const userExists = await checkUserExists(formData.email);
+
     if (userExists) {
       setStep('password');
     } else {
@@ -114,13 +115,13 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       return;
     }
 
-    await register(formData.email, formData.password);
+    await register(formData.email, formData.password, formData.userName);
     if (!error) {
       onClose();
     }
 
     setFormData({
-      name: '',
+      userName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -182,7 +183,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
           <Registration
             isOpen={isOpen}
             onClose={onClose}
-            name={formData.name}
+            userName={formData.userName}
             password={formData.password}
             confirmPassword={formData.confirmPassword}
             passwordError={errors.password}

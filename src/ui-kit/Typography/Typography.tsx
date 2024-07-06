@@ -11,7 +11,7 @@ const sizeMap = {
   xl: '24px',
   xxl: '36px',
   logo: '26px',
-  title: '64px'
+  title: '64px',
 };
 
 export const Typography = ({
@@ -22,12 +22,13 @@ export const Typography = ({
   upperCase = false,
   size = 'm',
   style,
-  font = 'TTCommons'
+  font = 'TTCommons',
+  className,
 }: PropsWithChildren<TypographyProps>) => {
   return (
     <Text
       style={{ fontWeight: weight, fontSize: sizeMap[size], ...style }}
-      className={cn(styles[font], styles[color], { [styles.upperCase]: upperCase })}
+      className={cn(styles[font], styles[color], className, { [styles.upperCase]: upperCase })}
     >
       {children}
     </Text>

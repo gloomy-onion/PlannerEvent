@@ -8,5 +8,6 @@ export type TypographyProps = {
   upperCase?: boolean;
   style?: React.CSSProperties;
   font?: 'RedCollar' | 'TTCommons';
+  className?: string;
 };
 

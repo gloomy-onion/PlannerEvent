@@ -4,7 +4,7 @@ import styles from './Registration.module.scss';
 import { Button, Information, Modal, TextField, Typography } from '../../ui-kit';
 
 type RegistrationProps = {
-  name: string;
+  userName: string;
   password: string;
   passwordError: string | null;
   confirmPassword: string;
@@ -18,7 +18,7 @@ type RegistrationProps = {
 export const Registration = ({
   isOpen,
   onClose,
-  name,
+  userName,
   password,
   passwordError,
   confirmPassword,
@@ -36,7 +36,7 @@ export const Registration = ({
           Регистрация
         </Typography>
         <Information />
-        <TextField textFieldType={'text'} label={'Ваше имя'} value={name} onChange={handleChange} name={'name'}/>
+        <TextField textFieldType={'text'} label={'Ваше имя'} value={userName} onChange={handleChange} name={'userName'} />
         <TextField
           label={'Пароль'}
           value={password}
