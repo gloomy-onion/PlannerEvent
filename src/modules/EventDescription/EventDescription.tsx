@@ -2,15 +2,18 @@ import React from 'react';
 
 import styles from './EventDescription.module.scss';
 import { eventImg } from '../../assets/img/eventImg';
-import { Button, EventDatePlace, ImageCarousel, Participant, Typography } from '../../ui-kit';
+import { Button, EventDatePlace, ImageCarousel, Modal, Participant, Typography } from '../../ui-kit';
 
 type EventDescriptionProps = {
   eventLabel: string;
   description: string;
+  isOpen: boolean;
+  onClose: () => void;
 };
 
-export const EventDescription = ({ eventLabel, description }: EventDescriptionProps) => {
+export const EventDescription = ({ eventLabel, description, isOpen, onClose }: EventDescriptionProps) => {
   return (
+    <Modal isOpen onClose={onClose}>
     <div className={styles.eventDescriptionContainer}>
       <div className={styles.closeBtn}><Button buttonType={'close'}/></div>
       <Typography size={'xxl'} font={'RedCollar'}>
@@ -42,5 +45,6 @@ export const EventDescription = ({ eventLabel, description }: EventDescriptionPr
       <ImageCarousel items={eventImg} />
       <Button width={'343px'} label={'Присоединиться к событию'} />
     </div>
+    </Modal>
   );
 };

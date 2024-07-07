@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import styles from './Auth.module.scss';
+import { validateEmail } from '../../api/helpers';
 import { useAuth } from '../../context/AuthContext';
 import { Button, Modal, TextField, Typography } from '../../ui-kit';
 import { Registration } from '../Registration/Registration';
@@ -43,13 +44,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       [name]: null,
     });
   };
-
-  const validateEmail = (email: string) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    return re.test(String(email).toLowerCase());
-  };
-
+  
   const handleNext = async () => {
     if (!validateEmail(formData.email)) {
       setErrors({
@@ -104,10 +99,11 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       return;
     }
 
-    const passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.,:;?!*+%<>@[\]{}\\_$#])[^]{8,32}$/.test(
+    const validatePassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.,:;?!*+%<>@[\]{}\\_$#])[^]{8,32}$/.test(
       formData.password,
     );
-    if (!passwordValid) {
+
+    if (!validatePassword) {
       setErrors({
         ...errors,
         confirmPassword: 'Используйте латинские буквы, цифры и спец символы',

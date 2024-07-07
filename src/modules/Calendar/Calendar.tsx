@@ -1,10 +1,9 @@
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styles from './Calendar.module.scss';
 import { daysInWeek, months } from './constants';
 import { daysInMonth, firstDayOfMonth } from './helpers';
-import { api } from '../../api/api';
 import Avatar from '../../assets/img/Avatar.png';
 import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { Button, DayTemplate, Typography } from '../../ui-kit';
@@ -31,25 +30,25 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  useEffect(() => {
-    async function getEvents() {
-      try {
-        const response = await api.get('events?pagination[pageSize]=50&populate=*');
-        const { data } = response.data;
-        data.forEach((event: { owner: object; start: string; dateStart: string; className?: string }) => {
-          event.start = event.dateStart.split('T')[0];
-          if (new Date(event.start) < new Date()) {
-            event.className = 'past';
-          }
-        });
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    getEvents();
-  }, []);
+  // useEffect(() => {
+  //   async function getEvents() {
+  //     try {
+  //       const response = await api.get('events?pagination[pageSize]=50&populate=*');
+  //       const { data } = response.data;
+  //       data.forEach((event: { owner: object; start: string; dateStart: string; className?: string }) => {
+  //         event.start = event.dateStart.split('T')[0];
+  //         if (new Date(event.start) < new Date()) {
+  //           event.className = 'past';
+  //         }
+  //       });
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //
+  //   getEvents();
+  // }, []);
 
   const handlePrevMonth = (): void => {
     if (currentMonth === 0) {

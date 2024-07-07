@@ -6,14 +6,16 @@ import { Button, Modal, Typography } from '../../ui-kit';
 
 type SuccessProps = {
   successType: 'join' | 'create';
+  isOpen: boolean;
+  onClose: () => void;
 };
 
-export const Success = ({ successType }: SuccessProps) => {
+export const Success = ({ successType, isOpen, onClose }: SuccessProps) => {
   return (
-    <Modal isOpen onClose={() => alert('close')}>
+    <Modal isOpen onClose={onClose}>
       <div className={cn(styles.successContainer, styles[successType])}>
         <div className={styles.closeBtn}>
-          <Button buttonType={'close'} onClick={() => alert('close')} />
+          <Button buttonType={'close'} onClick={onClose} />
         </div>
         <Typography font={'RedCollar'} as={'h2'} size={'title'}>
           {successType === 'join' ? 'Поздравляем!' : 'Ура!'}
