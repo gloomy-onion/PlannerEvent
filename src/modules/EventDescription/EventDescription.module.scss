@@ -1,13 +1,16 @@
 @import '../../variables';
 
 .eventDescriptionContainer {
+  background: $grayBackground;
+  border-radius: 64px;
   width: 1075px;
   height: 934px;
   display: flex;
   flex-direction: column;
-  padding: 90px 64px 126px;
+  padding: 90px 64px 50px;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .eventDescriptionUpper {

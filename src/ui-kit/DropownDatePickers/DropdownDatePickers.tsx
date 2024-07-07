@@ -4,19 +4,18 @@ import styles from './DropdownDatePickers.module.scss';
 import { PickDate } from '../DatePicker/PickDate';
 import { DropdownContainer } from '../Dropdown/DropdownContainer';
 
-export const DropdownDatePickers = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+type DropdownDatePickersProps = {
+  startDate: Date | null;
+  endDate: Date | null;
+  onChange: (dates: [Date | null, Date | null]) => void;
+};
+
+export const DropdownDatePickers = ({startDate, endDate, onChange} :DropdownDatePickersProps) => {
 
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [isEndOpen, setIsEndOpen] = useState(false);
-  const onDateChange = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
 
-  const Picker = () => <PickDate startDate={startDate} endDate={endDate} onChange={onDateChange} />;
+  const Picker = () => <PickDate startDate={startDate} endDate={endDate} onChange={onChange} />;
 
   return (
     <div className={styles.datePickersContainer}>

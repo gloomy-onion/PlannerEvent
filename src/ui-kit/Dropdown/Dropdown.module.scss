@@ -16,6 +16,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
 }
 
 .dropdownBox {
@@ -33,7 +34,7 @@
   position: absolute;
   background-color: white;
   top: 240px;
-  right: 223px;
+  right: 55px;
   width: 346px;
   padding: 32px 16px 40px 16px;
   z-index: 1;

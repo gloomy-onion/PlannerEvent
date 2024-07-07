@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-
 import styles from './Description.module.scss';
 import { Typography } from '../Typography/Typography';
 
 type DescriptionProps = {
   label?: string;
   noticeText?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
-export const Description = ({ label, noticeText }: DescriptionProps) => {
-  const [inputValue, setInputValue] = useState('');
+export const Description: React.FC<DescriptionProps> = ({ label, noticeText, value, onChange }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.target;
-    if (value.length <= 500) {
-      setInputValue(value);
+    if (onChange) {
+      onChange(e);
     }
   };
 
@@ -24,21 +23,17 @@ export const Description = ({ label, noticeText }: DescriptionProps) => {
       <div className={styles.descriptionCover}>
         <textarea
           className={styles.descriptionTextarea}
-          value={inputValue}
+          value={value}
           onChange={handleInputChange}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => {
-            if (!inputValue) {
-              setIsFocused(false);
-            }
-          }}
+          onBlur={() => setIsFocused(false)}
         />
         <Typography
           color={'gray'}
           style={{
             left: '16px',
-            top: isFocused ? '1px' : '20px',
-            fontSize: isFocused ? '14px' : '18px',
+            top: isFocused || !!value ? '1px' : '20px',
+            fontSize: isFocused || !!value ? '14px' : '18px',
             position: 'absolute',
           }}
         >
@@ -51,9 +46,9 @@ export const Description = ({ label, noticeText }: DescriptionProps) => {
             {noticeText}
           </Typography>
         )}
-        {inputValue.length > 450 && (
+        {value && (
           <Typography size={'m'} weight={400} color={'gray'}>
-            {inputValue.length}/500
+            {value.length}/500
           </Typography>
         )}
       </div>

@@ -6,49 +6,40 @@ import { daysInWeek, months } from './constants';
 import { daysInMonth, firstDayOfMonth } from './helpers';
 import Avatar from '../../assets/img/Avatar.png';
 import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
-import { Button, DayTemplate, Typography } from '../../ui-kit';
+import { CalendarEvent, useEvents } from '../../context/EventContext';
+import { Button, DayTemplate, EventTag, Typography } from '../../ui-kit';
 import { Auth } from '../Auth/Auth';
 import { CreateEvent } from '../CreateEvent/CreateEvent';
-
-type Event = {
-  date: string;
-  title: string;
-  time?: string;
-};
+import { EventDescription } from '../EventDescription/EventDescription';
 
 type CalendarProps = {
-  events: Event[];
   isAuth: boolean;
 };
 
-export const Calendar = ({ events, isAuth }: CalendarProps) => {
+export const Calendar = ({ isAuth }: CalendarProps) => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth());
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [isCreateEventModalOpen, setCreateEventModalOpen] = useState(false);
+  const [isEventDescriptionModalOpen, setEventDescriptionModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const { events, loading, error, fetchEvents } = useEvents();
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const openAuthModal = () => setAuthModalOpen(true);
+  const closeAuthModal = () => setAuthModalOpen(false);
 
-  // useEffect(() => {
-  //   async function getEvents() {
-  //     try {
-  //       const response = await api.get('events?pagination[pageSize]=50&populate=*');
-  //       const { data } = response.data;
-  //       data.forEach((event: { owner: object; start: string; dateStart: string; className?: string }) => {
-  //         event.start = event.dateStart.split('T')[0];
-  //         if (new Date(event.start) < new Date()) {
-  //           event.className = 'past';
-  //         }
-  //       });
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  //
-  //   getEvents();
-  // }, []);
+  const openCreateEventModal = () => setCreateEventModalOpen(true);
+  const closeCreateEventModal = () => setCreateEventModalOpen(false);
+
+  const openEventDescriptionModal = (event: CalendarEvent) => {
+    setSelectedEvent(event);
+    setEventDescriptionModalOpen(true);
+  };
+  const closeEventDescriptionModal = () => {
+    setSelectedEvent(null);
+    setEventDescriptionModalOpen(false);
+  };
 
   const handlePrevMonth = (): void => {
     if (currentMonth === 0) {
@@ -68,10 +59,10 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
     }
   };
 
-  const getEventsForDay = (day: number): Event[] => {
+  const getEventsForDay = (day: number): CalendarEvent[] => {
     const date = new Date(currentYear, currentMonth, day).toISOString().slice(0, 10);
 
-    return events.filter((event) => event.date === date);
+    return events.filter((event) => event.dateStart.startsWith(date));
   };
 
   const renderCalendar = () => {
@@ -113,10 +104,12 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
         <DayTemplate date={day} weekend={isWeekend} key={day}>
           <div className={styles.events}>
             {eventsForDay.map((event) => (
-              <div className={styles.event} key={event.title}>
-                {event.time ? <span>{event.time} - </span> : null}
-                {event.title}
-              </div>
+              <EventTag
+                eventType={event.type}
+                eventLabel={event.title}
+                key={event.id}
+                onClick={() => openEventDescriptionModal(event)}
+              />
             ))}
           </div>
         </DayTemplate>
@@ -150,10 +143,10 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
             <button onClick={handleNextMonth} className={styles.nextButton} />
           </div>
           {!isAuth ? (
-            <Button label={'Войти'} onClick={openModal} />
+            <Button label={'Войти'} onClick={openAuthModal} />
           ) : (
             <div className={styles.isAuthBlock}>
-              <Button buttonType={'add'} onClick={openModal} />
+              <Button buttonType={'add'} onClick={openCreateEventModal} />
               <img alt={'Avatar'} src={Avatar} width={'80px'} />
             </div>
           )}
@@ -169,8 +162,20 @@ export const Calendar = ({ events, isAuth }: CalendarProps) => {
         </div>
         <div className={cn(styles.body, styles.days)}>{renderCalendar()}</div>
       </div>
-      <Auth isOpen={isModalOpen} onClose={closeModal} />
-      <CreateEvent isOpen={isModalOpen} onClose={closeModal} />
+      <Auth isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+      <CreateEvent isOpen={isCreateEventModalOpen} onClose={closeCreateEventModal} />
+      {selectedEvent && (
+        <EventDescription
+          photos={selectedEvent.photos}
+          isAuth={isAuth}
+          selectedEventDate={selectedEvent.dateStart}
+          eventLocation={selectedEvent.location}
+          eventLabel={selectedEvent.title}
+          description={selectedEvent.description}
+          isOpen={isEventDescriptionModalOpen}
+          onClose={closeEventDescriptionModal}
+        />
+      )}
     </div>
   );
 };

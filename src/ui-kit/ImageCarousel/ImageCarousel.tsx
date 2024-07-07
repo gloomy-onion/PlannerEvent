@@ -5,56 +5,62 @@ import styles from './ImageCarousel.module.scss';
 import { Typography } from '../Typography/Typography';
 
 type ImageItem = {
-  label: string;
-  imgPath: string;
+  id: number;
+  name: string;
+  url: string;
 };
 
 type ImageCarouselProps = {
-  items: ImageItem[];
+  items?: ImageItem[];
 };
 
 export const ImageCarousel = ({ items }: ImageCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  const slideNext = () => {
-    const newItems = [...items];
-    const firstItem = newItems.shift();
-    if (firstItem) {
-      newItems.push(firstItem);
+  items ? useEffect(() => {
+    if (items.length > 1) {
+      const newItems = [...items];
+      const firstItem = newItems.shift();
+      if (firstItem) {
+        newItems.push(firstItem);
+      }
     }
-    setActiveIndex((prevIndex) => {
-      return (prevIndex + 1) % newItems.length;
-    });
+  }, [activeIndex]) : null;
+
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return (
+      <div className={styles.carouselContainer}>
+        <Typography as={'h3'} font={'RedCollar'} size={'xl'}>
+          Галерея
+        </Typography>
+        <div className={styles.noImagesMessage}>
+          <Typography size={'l'}>Нет доступных изображений</Typography>
+        </div>
+      </div>
+    );
+  }
+
+  const slideNext = () => {
+    if (items.length > 1) {
+      const newItems = [...items];
+      const firstItem = newItems.shift();
+      if (firstItem) {
+        newItems.push(firstItem);
+      }
+      setActiveIndex((prevIndex) => {
+        return (prevIndex + 1) % newItems.length;
+      });
+    }
   };
 
   const slidePrev = () => {
-    setActiveIndex((val) => {
-      return val > 0 ? val - 1 : items.length - 1;
-    });
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowLeft') {
-        slidePrev();
-      } else if (event.key === 'ArrowRight') {
-        slideNext();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  useEffect(() => {
-    const newItems = [...items];
-    const firstItem = newItems.shift();
-    if (firstItem) {
-      newItems.push(firstItem);
+    if (items.length > 1) {
+      setActiveIndex((val) => {
+        return val > 0 ? val - 1 : items.length - 1;
+      });
     }
-  }, [activeIndex]);
+  };
 
   return (
     <div className={styles.carouselContainer} ref={carouselRef}>
@@ -80,33 +86,28 @@ export const ImageCarousel = ({ items }: ImageCarouselProps) => {
         </div>
       </div>
       <div className={styles.floatingImages}>
-        {items.map((item, index) => {
-          return (
-            <div key={item.label}>
-              <img
-                src={item.imgPath}
-                alt={item.label}
-                className={cn(styles.carouselItem, { [styles.carouselItemActive]: activeIndex === index })}
-              />
-            </div>
-          );
-        })}
+        {items.map((item, index) => (
+          <div key={item.id}>
+            <img
+              src={item.url}
+              alt={item.name}
+              className={cn(styles.carouselItem, { [styles.carouselItemActive]: activeIndex === index })}
+            />
+          </div>
+        ))}
       </div>
       <div className={styles.carouselDots}>
-        {items.map((item, index) => {
-          return (
-            <div
-              key={index}
-              className={cn(styles.carouselDot, { [styles.carouselDotActive]: activeIndex === index })}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveIndex(index);
-              }}
-            />
-          );
-        })}
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className={cn(styles.carouselDot, { [styles.carouselDotActive]: activeIndex === index })}
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveIndex(index);
+            }}
+          />
+        ))}
       </div>
     </div>
   );
 };
-

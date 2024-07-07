@@ -1,30 +1,24 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-interface User {
+import { api } from '../api/api';
+
+type User = {
   id: number;
   email: string;
   profilePicture: string;
-  userName: string;
-}
+  username: string;
+};
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null;
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, username: string) => Promise<void>;
   checkUserExists: (email: string) => Promise<boolean>;
-}
-
-const BASE_URL = 'https://planner.rdclr.ru/api';
-
-const api = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json; charset=utf-8',
-  },
-});
+  getMe: () => Promise<void>
+};
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -36,6 +30,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
   const checkUserExists = async (email: string): Promise<boolean> => {
     setLoading(true);
@@ -95,8 +90,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const getMe = async () => {
+    try {
+      const response = await api.get('users/me');
+      setUsername(response.data.username);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError('Что-то пошло не так, попробуйте позже');
+      }
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, error, login, register, checkUserExists }}>
+    <AuthContext.Provider value={{ user, loading, error, login, register, checkUserExists, getMe }}>
       {children}
     </AuthContext.Provider>
   );
