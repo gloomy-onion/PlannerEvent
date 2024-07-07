@@ -31,6 +31,7 @@ type EventsContextType = {
   createEvent: (newEvent: Partial<CalendarEvent>) => Promise<void>;
   joinEvent: (eventId: number) => Promise<void>;
   deleteEvent: (eventId: number) => Promise<void>;
+  leaveEvent: (eventId: number) => Promise<void>;
 }
 
 const EventsContext = createContext<EventsContextType | undefined>(undefined);
@@ -49,11 +50,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ data: CalendarEvent[] }> = await api.get('/events', {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`
-        }
-      });
+      const response: AxiosResponse<{ data: CalendarEvent[] }> = await api.get('/events');
       const allEvents = response.data.data;
 
       const now = new Date().toISOString();
@@ -96,7 +93,28 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.post(`/events/${eventId}/join`, null, {
+      await api.post(`/events/${eventId}/join`, {}, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`
+        }
+      });
+      setEvents(prevEvents =>
+        prevEvents.map(event =>
+          event.id === eventId ? { ...event, type: 'accede' } : event
+        )
+      );
+      await fetchEvents();
+    } catch (err) {
+      setError('Не удалось присоединиться к событию, попробуйте позже');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const leaveEvent = async (eventId: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await api.post(`/events/${eventId}/leave`, {}, {
         headers: {
           Authorization: `Bearer ${API_TOKEN}`
         }
@@ -131,7 +149,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
   }, [user]);
 
   return (
-    <EventsContext.Provider value={{ events, loading, error, fetchEvents, createEvent, joinEvent, deleteEvent }}>
+    <EventsContext.Provider value={{ events, loading, error, fetchEvents, createEvent, joinEvent, deleteEvent, leaveEvent }}>
       {children}
     </EventsContext.Provider>
   );

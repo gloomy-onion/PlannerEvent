@@ -35,9 +35,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.get(`/users?email=${email}`);
+      const response = await api.get('/users');
 
-      return true;
+      for (const user of response.data) {
+        if (user.email === email) {
+          return true;
+        }
+      }
+
+      return false;
     } catch (err) {
       setError('Что-то пошло не так, попробуйте позже');
       return false;

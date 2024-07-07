@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import styles from './Description.module.scss';
 import { Typography } from '../Typography/Typography';
 

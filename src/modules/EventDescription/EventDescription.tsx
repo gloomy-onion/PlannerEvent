@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styles from './EventDescription.module.scss';
+import { useEvents } from '../../context/EventContext';
 import { Button, EventDatePlace, ImageCarousel, Modal, Participant, Typography } from '../../ui-kit';
+import { Auth } from '../Auth/Auth';
+import { ErrorPopup } from '../ErrorPopup/ErrorPopup';
 
 type Photo = {
   id: number;
@@ -18,6 +21,7 @@ type EventDescriptionProps = {
   onClose: () => void;
   selectedEventDate: string;
   photos: Photo[];
+  eventId: number;
 };
 
 export const EventDescription: React.FC<EventDescriptionProps> = ({
@@ -28,8 +32,15 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
   onClose,
   isAuth,
   selectedEventDate,
-  photos
+  photos,
+  eventId,
 }) => {
+  const { joinEvent, leaveEvent } = useEvents();
+  const [isErrorModalOpen, setErrorModalOpen] = useState(false);
+  const [subscribedEvent, setSubscribedEvent] = useState(true);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const openAuthModal = () => setAuthModalOpen(true);
+  const closeAuthModal = () => setAuthModalOpen(false);
   if (!isOpen) {
     return null;
   }
@@ -56,6 +67,27 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
   const weekdays = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
   const weekday = weekdays[eventDate.getDay()];
   const time = eventDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+
+  const openErrorModal = () => setErrorModalOpen(true);
+  const closeErrorModal = () => setErrorModalOpen(false);
+
+  const handleJoinEvent = async () => {
+    try {
+      await joinEvent(eventId);
+      setSubscribedEvent(true);
+    } catch (error) {
+      openErrorModal();
+    }
+  };
+
+  const handleLeaveEvent = async () => {
+    try {
+      await leaveEvent(eventId);
+      setSubscribedEvent(false);
+    } catch (error) {
+      openErrorModal();
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -86,18 +118,26 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
         </div>
         <ImageCarousel items={photos} />
         {isAuth ? (
-          <Button width="343px" label="Присоединиться к событию" />
-        ) : (
           <>
-            <Typography size="m" font="RedCollar" as="h4" color="red">
+            {subscribedEvent ? (
+              <Button buttonType={'filledBlack'} label={'Отменить участие'} onClick={() => handleLeaveEvent()} />
+            ) : (
+              <Button width={'343px'} label={'Присоединиться к событию'} onClick={() => handleJoinEvent()} />
+            )}
+          </>
+        ) : (
+          <div className={styles.notAuthJoin} onClick={openAuthModal}>
+            <Typography size={'m'} font={'RedCollar'} as={'h4'} color={'red'}>
               Войдите
             </Typography>
-            <Typography size="m" font="RedCollar" as="h4">
+            <Typography size={'m'} font={'RedCollar'} as={'h4'}>
               , чтобы присоединиться к событию
             </Typography>
-          </>
+          </div>
         )}
       </div>
+      <ErrorPopup isOpen={isErrorModalOpen} onClose={closeErrorModal} />
+      <Auth isOpen={isAuthModalOpen} onClose={closeAuthModal} />
     </Modal>
   );
 };

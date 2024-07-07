@@ -24,7 +24,7 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
   const [isCreateEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [isEventDescriptionModalOpen, setEventDescriptionModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-  const { events, loading, error, fetchEvents } = useEvents();
+  const { events } = useEvents();
 
   const openAuthModal = () => setAuthModalOpen(true);
   const closeAuthModal = () => setAuthModalOpen(false);
@@ -166,6 +166,7 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
       <CreateEvent isOpen={isCreateEventModalOpen} onClose={closeCreateEventModal} />
       {selectedEvent && (
         <EventDescription
+          eventId={selectedEvent.id}
           photos={selectedEvent.photos}
           isAuth={isAuth}
           selectedEventDate={selectedEvent.dateStart}
