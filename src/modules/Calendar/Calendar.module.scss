@@ -1,0 +1,184 @@
+@import '../../variables';
+
+.calendar {
+  margin: 60px;
+}
+.logo {
+  width: 53px;
+  height: 31px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 80px;
+  width: 100%;
+}
+
+.headerLeft {
+  width: 680px;
+  align-items: center;
+  height: 77px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.body {
+  border: 1px solid $gray;
+  border-radius: 24px;
+  overflow: hidden;
+  border-collapse: collapse;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 1px;
+  background: $gray;
+
+}
+.weekDays {
+  background: none;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 1px;
+}
+.dayName, .day {
+  padding-right: 10px;
+  text-align: right;
+  font-family: Redcollar, sans-serif;
+  font-size: 24px;
+  text-transform: capitalize;
+}
+.dayName{
+  padding: 0 0 20px 0;
+}
+.day {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid $gray;
+  overflow: hidden;
+}
+
+.prevButton {
+  width: 64px;
+  height: 48px;
+  border: none;
+  background: $lightGray;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.prevButton:after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  transform: rotate(45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+  position: absolute;
+  top: 20%;
+  left: 45%;
+}
+
+.prevButton:before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  transform: rotate(-45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+}
+
+.nextButton {
+  width: 64px;
+  height: 48px;
+  border: none;
+  background: $lightGray;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.nextButton:after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  transform: rotate(45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+}
+
+.nextButton:before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: rotate(-45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+}
+.isAuthBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+}
+
+.events {
+  margin-top: 5px;
+}
+
+.calendarButtons {
+  display: flex;
+  flex-direction: row;
+  width: 136px;
+  justify-content: space-between;
+}
+
+.headerRight {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.event {
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.empty {
+  background-color: #f9f9f9;
+}
+
+.calendarDays {
+  width: 100%;
+  height: 100%;
+}

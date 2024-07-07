@@ -2,27 +2,28 @@ import React, { useState } from 'react';
 
 import styles from './DropdownDatePickers.module.scss';
 import { PickDate } from '../DatePicker/PickDate';
-import { PLACEHOLDER } from '../DatePicker/constants';
 import { DropdownContainer } from '../Dropdown/DropdownContainer';
 
-export const DropdownDatePickers = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+type DropdownDatePickersProps = {
+  startDate: Date | null;
+  endDate: Date | null;
+  onChange: (dates: [(Date | null ), (Date | null) ]) => void;
+};
+
+export const DropdownDatePickers = ({startDate, endDate, onChange} :DropdownDatePickersProps) => {
 
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [isEndOpen, setIsEndOpen] = useState(false);
-  const onDateChange = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
+  const handlePickerApply = () => {
+    setIsStartOpen(false);
+    setIsEndOpen(false);
   };
 
-  const Picker = () => <PickDate startDate={startDate} endDate={endDate} onChange={onDateChange} />;
+  const Picker = () => <PickDate startDate={startDate} endDate={endDate} onApply={handlePickerApply} onChange={onChange}/>;
 
   return (
     <div className={styles.datePickersContainer}>
       <DropdownContainer
-        placeholder={PLACEHOLDER}
         label={'Начало'}
         value={startDate?.toLocaleDateString()}
         onClick={() => setIsEndOpen(false)}
@@ -32,7 +33,6 @@ export const DropdownDatePickers = () => {
         <Picker />
       </DropdownContainer>
       <DropdownContainer
-        placeholder={PLACEHOLDER}
         label={'Конец'}
         value={endDate?.toLocaleDateString()}
         onClick={() => setIsStartOpen(false)}

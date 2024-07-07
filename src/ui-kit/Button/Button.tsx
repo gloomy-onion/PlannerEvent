@@ -7,9 +7,18 @@ import { Typography } from '../Typography/Typography';
 
 type ButtonProps = {
   disabled?: boolean;
-  buttonType?: 'filledBlack' | 'filledRed' | 'outlineBlack' | 'outlineRed' | 'previous' | 'next';
+  buttonType?:
+    | 'filledBlack'
+    | 'filledRed'
+    | 'outlineBlack'
+    | 'outlineRed'
+    | 'previous'
+    | 'next'
+    | 'close'
+    | 'add'
+    | 'errorClose';
   label?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   width?: string;
 };
 
@@ -18,16 +27,16 @@ export const Button = ({
   disabled = false,
   label,
   onClick,
-  width = '124px',
+  width,
 }: PropsWithChildren<ButtonProps>) => {
   return (
     <button
       disabled={disabled}
       className={cn(styles.button, styles[buttonType])}
-      onClick={(event) => onClick && onClick(event)}
+      onClick={() => onClick && onClick()}
       style={{ width }}
     >
-      <Typography as={'h4'} weight={400} color={getLabelColor(buttonType, disabled)} size={'m'} font={'redCollar'}>
+      <Typography as={'h4'} weight={400} color={getLabelColor(buttonType, disabled)} size={'m'} font={'RedCollar'}>
         {label}
       </Typography>
     </button>

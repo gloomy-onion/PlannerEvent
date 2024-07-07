@@ -14,10 +14,11 @@ type DatePickerProps = {
   minDate?: Date;
   startDate?: Date | null;
   endDate?: Date | null;
-  onChange?: (date: [Date | null, Date | null]) => void;
+  onChange?: (dates: [(Date | null ), (Date | null )]) => void;
   label?: string;
   value?: string;
   placeholder?: string;
+  onApply?: () => void;
 };
 
 registerLocale('ru', ru);
@@ -29,6 +30,7 @@ export const PickDate: React.FC<DatePickerProps> = ({
   onChange,
   startDate,
   endDate,
+  onApply,
   ...otherProps
 }) => {
   const { today, midnightToday } = getToday();
@@ -54,7 +56,12 @@ export const PickDate: React.FC<DatePickerProps> = ({
         }
       />
       <div className={styles.datepickerButtons}>
-        <Button label={'Применить'} buttonType={'filledBlack'} width={'312px'} />
+        <Button label={'Применить'} buttonType={'filledBlack'} width={'312px'} onClick={() => {
+          onChange && onChange([startDate!, endDate!]);
+          if (onApply) {
+            onApply();
+          }
+        }} />
       </div>
     </>
   );

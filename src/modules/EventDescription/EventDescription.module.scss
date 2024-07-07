@@ -1,0 +1,45 @@
+@import '../../variables';
+
+.eventDescriptionContainer {
+  background: $grayBackground;
+  border-radius: 64px;
+  width: 1075px;
+  height: 934px;
+  display: flex;
+  flex-direction: column;
+  padding: 90px 64px 50px;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.eventDescriptionUpper {
+  width: 947px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.eventDescriptionText {
+  width: 703px;
+}
+
+.eventParticipants {
+  align-self: flex-start;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.closeBtn {
+  top: 40px;
+  left: 995px;
+  position: absolute;
+}
+
+.notAuthJoin {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}

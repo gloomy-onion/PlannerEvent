@@ -1,6 +1,7 @@
 @import '../../variables';
 
 .event {
+  margin-top: 4px;
   border: none;
   border-radius: 8px;
   height: 32px;
@@ -9,6 +10,7 @@
   flex-direction: row;
   background: $lightGray;
   align-items: center;
+  cursor: pointer;
 }
 
 .eventStar {
