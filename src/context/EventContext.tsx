@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 import { useAuth } from './AuthContext';
-import { api } from '../api/api';
+import { api, API_TOKEN } from '../api/api';
 
 export type CalendarEvent = {
   id: number;
@@ -49,7 +49,11 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ data: CalendarEvent[] }> = await api.get('/events');
+      const response: AxiosResponse<{ data: CalendarEvent[] }> = await api.get('/events', {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`
+        }
+      });
       const allEvents = response.data.data;
 
       const now = new Date().toISOString();
@@ -81,12 +85,6 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
       setEvents(prevEvents => [...prevEvents, { ...response.data.data, type: 'created' }]);
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        if (err.response?.status === 403) {
-          setError('Доступ запрещен. Пожалуйста, обратитесь к администратору.');
-        } else {
-          setError('Произошла ошибка при создании события. Пожалуйста, попробуйте позже.');
-        }
-      } else {
         setError('Произошла ошибка при создании события. Пожалуйста, попробуйте позже.');
       }
     } finally {
@@ -98,7 +96,11 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.post(`/events/${eventId}/join`);
+      await api.post(`/events/${eventId}/join`, null, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`
+        }
+      });
       await fetchEvents();
     } catch (err) {
       setError('Не удалось присоединиться к событию, попробуйте позже');
@@ -111,7 +113,11 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.delete(`/events/${eventId}`);
+      await api.delete(`/events/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`
+        }
+      });
       setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
     } catch (err) {
       setError('Не удалось удалить событие, попробуйте позже');

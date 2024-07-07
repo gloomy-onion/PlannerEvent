@@ -7,15 +7,19 @@ import { DropdownContainer } from '../Dropdown/DropdownContainer';
 type DropdownDatePickersProps = {
   startDate: Date | null;
   endDate: Date | null;
-  onChange: (dates: [Date | null, Date | null]) => void;
+  onChange: (dates: [(Date | null ), (Date | null) ]) => void;
 };
 
 export const DropdownDatePickers = ({startDate, endDate, onChange} :DropdownDatePickersProps) => {
 
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [isEndOpen, setIsEndOpen] = useState(false);
+  const handlePickerApply = () => {
+    setIsStartOpen(false);
+    setIsEndOpen(false);
+  };
 
-  const Picker = () => <PickDate startDate={startDate} endDate={endDate} onChange={onChange} />;
+  const Picker = () => <PickDate startDate={startDate} endDate={endDate} onApply={handlePickerApply} onChange={onChange}/>;
 
   return (
     <div className={styles.datePickersContainer}>

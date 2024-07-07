@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { api } from '../api/api';
+import { api, API_TOKEN } from '../api/api';
 
 type User = {
   id: number;
@@ -17,7 +17,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, username: string) => Promise<void>;
   checkUserExists: (email: string) => Promise<boolean>;
-  getMe: () => Promise<void>
+  getMe: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
 
   const checkUserExists = async (email: string): Promise<boolean> => {
     setLoading(true);
@@ -92,12 +91,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const getMe = async () => {
     try {
-      const response = await api.get('users/me');
-      setUsername(response.data.username);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response) {
-        setError('Что-то пошло не так, попробуйте позже');
-      }
+      const response = await api.get('users/me', {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      setError('Что-то пошло не так, попробуйте позже');
+      throw error;
     }
   };
 
