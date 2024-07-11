@@ -27,7 +27,7 @@ export const Registration = ({
   handleRegister,
 }: RegistrationProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal>
       <div className={styles.registrationContainer}>
         <div className={styles.closeBtn}>
           <Button buttonType={'close'} onClick={onClose} />

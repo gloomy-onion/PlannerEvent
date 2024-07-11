@@ -1,0 +1,121 @@
+@import '../../variables';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 80px;
+  width: 100%;
+}
+
+.headerLeft {
+  width: 680px;
+  align-items: center;
+  height: 77px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.prevButton {
+  width: 64px;
+  height: 48px;
+  border: none;
+  background: $lightGray;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.prevButton:after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  transform: rotate(45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+  position: absolute;
+  top: 20%;
+  left: 45%;
+}
+
+.prevButton:before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  transform: rotate(-45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+}
+
+.nextButton {
+  width: 64px;
+  height: 48px;
+  border: none;
+  background: $lightGray;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.nextButton:after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  transform: rotate(45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+}
+
+.nextButton:before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border: none;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: rotate(-45deg);
+  background: rgba(20, 22, 26, 1);
+  border-radius: 30px;
+}
+
+.isAuthBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+}
+
+.calendarButtons {
+  display: flex;
+  flex-direction: row;
+  width: 136px;
+  justify-content: space-between;
+}
+
+.headerRight {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

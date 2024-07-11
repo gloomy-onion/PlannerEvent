@@ -12,7 +12,7 @@ type SuccessProps = {
 
 export const Success = ({ successType, isOpen, onClose }: SuccessProps) => {
   return (
-    <Modal isOpen onClose={onClose}>
+    <Modal>
       <div className={cn(styles.successContainer, styles[successType])}>
         <div className={styles.closeBtn}>
           <Button buttonType={'close'} onClick={onClose} />

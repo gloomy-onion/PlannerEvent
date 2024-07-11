@@ -95,7 +95,7 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal>
       <div className={styles.createEventContainer}>
         <Typography font="RedCollar" size="xxl">
           Создание события

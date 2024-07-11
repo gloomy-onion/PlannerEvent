@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 import styles from './Calendar.module.scss';
 import { daysInWeek, months } from './constants';
 import { daysInMonth, firstDayOfMonth } from './helpers';
-import Avatar from '../../assets/img/Avatar.png';
-import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { CalendarEvent, useEvents } from '../../context/EventContext';
-import { Button, DayTemplate, EventTag, Typography } from '../../ui-kit';
+import { DayTemplate, EventTag } from '../../ui-kit';
 import { Auth } from '../Auth/Auth';
 import { CreateEvent } from '../CreateEvent/CreateEvent';
 import { EventDescription } from '../EventDescription/EventDescription';
+import { Header } from '../Header/Header';
 
 type CalendarProps = {
   isAuth: boolean;
@@ -63,6 +62,12 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
     const date = new Date(currentYear, currentMonth, day).toISOString().slice(0, 10);
 
     return events.filter((event) => event.dateStart.startsWith(date));
+  };
+
+  const getMonthYear = () => {
+    const monthName = months[currentMonth];
+    const displayYear = currentYear !== today.getFullYear() ? ` ${currentYear}` : '';
+    return `${monthName}${displayYear}`;
   };
 
   const renderCalendar = () => {
@@ -121,37 +126,15 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
 
   return (
     <div className={styles.calendar}>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Collar className={styles.logo} />
-          <Typography as={'h3'} font={'RedCollar'} size={'logo'}>
-            red collar
-          </Typography>
-          <Typography as={'h2'} font={'RedCollar'} size={'title'}>
-            planner
-          </Typography>
-          <Typography as={'h2'} font={'RedCollar'} size={'title'} color={'red'}>
-            event
-          </Typography>
-        </div>
-        <div className={styles.headerRight}>
-          <Typography size={'xl'} as={'h3'} font={'RedCollar'}>
-            {months[currentMonth]} {currentYear !== today.getFullYear() ? currentYear : ''}
-          </Typography>
-          <div className={styles.calendarButtons}>
-            <button onClick={handlePrevMonth} className={styles.prevButton} />
-            <button onClick={handleNextMonth} className={styles.nextButton} />
-          </div>
-          {!isAuth ? (
-            <Button label={'Войти'} onClick={openAuthModal} />
-          ) : (
-            <div className={styles.isAuthBlock}>
-              <Button buttonType={'add'} onClick={openCreateEventModal} />
-              <img alt={'Avatar'} src={Avatar} width={'80px'} />
-            </div>
-          )}
-        </div>
-      </div>
+      <Header
+        isAuth={isAuth}
+        handlePrevMonth={handlePrevMonth}
+        handleNextMonth={handleNextMonth}
+        currentYear={currentYear}
+        openAuthModal={openAuthModal}
+        openCreateEventModal={openCreateEventModal}
+        getMonthYear={getMonthYear}
+      />
       <div className={styles.calendarDays}>
         <div className={styles.weekDays}>
           {daysInWeek.map((day) => (

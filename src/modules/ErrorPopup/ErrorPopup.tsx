@@ -14,7 +14,7 @@ export const ErrorPopup = ({ isOpen, onClose, description }: ErrorPopupProps) =>
     return null;
   }
   return (
-    <Modal isOpen onClose={onClose}>
+    <Modal>
       <div className={styles.errorContainer}>
         <div className={styles.closeBtn}>
           <Button buttonType={'close'} onClick={onClose} />

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-
-import styles from './Auth.module.scss';
 import { validateEmail } from '../../api/helpers';
 import { useAuth } from '../../context/AuthContext';
-import { Button, Modal, TextField, Typography } from '../../ui-kit';
 import { Registration } from '../Registration/Registration';
+import { EmailAuth } from '../EmailAuth/EmailAuth';
+import { PasswordAuth } from '../PasswordAuth/PasswordAuth';
 
 type AuthProps = {
   isOpen: boolean;
@@ -18,7 +17,7 @@ type ErrorsState = {
 };
 
 export const Auth = ({ isOpen, onClose }: AuthProps) => {
-  const { checkUserExists, login, register, error, loading } = useAuth();
+  const { checkUserExists, login, register, error } = useAuth();
   const [step, setStep] = useState<'email' | 'password' | 'register'>('email');
   const [formData, setFormData] = useState({
     userName: '',
@@ -44,7 +43,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       [name]: null,
     });
   };
-  
+
   const handleNext = async () => {
     if (!validateEmail(formData.email)) {
       setErrors({
@@ -124,55 +123,28 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
     });
     setStep('email');
   };
-  const getHeader = () => {
-    return step === 'email' || step === 'password' ? 'Вход' : 'Регистрация';
-  };
 
   const renderStepContent = () => {
     switch (step) {
       case 'email':
         return (
-          <div className={styles.authContainer}>
-            <div className={styles.closeBtn}>
-              <Button buttonType={'close'} onClick={onClose} />
-            </div>
-            <Typography size={'xxl'} color={'black'} font={'RedCollar'}>
-              {getHeader()}
-            </Typography>
-            <TextField
-              textFieldType={'email'}
-              label={'E-mail'}
-              value={formData.email}
-              onChange={handleChange}
-              error={errors.email}
-              name="email"
-            />
-            <Button label={'Далее'} buttonType={'filledBlack'} width={'346px'} onClick={handleNext} />
-            {loading && <div>Загрузка...</div>}
-            {error && <div className={styles.error}>{error}</div>}
-          </div>
+          <EmailAuth
+            onClose={onClose}
+            handleChange={handleChange}
+            handleNext={handleNext}
+            value={formData.email}
+            error={errors.email}
+          />
         );
       case 'password':
         return (
-          <div className={styles.authContainer}>
-            <div className={styles.closeBtn}>
-              <Button buttonType={'close'} onClick={onClose} />
-            </div>
-            <Typography size={'xxl'} color={'black'} font={'RedCollar'}>
-              {getHeader()}
-            </Typography>
-            <TextField
-              label={'Пароль'}
-              value={formData.password}
-              onChange={handleChange}
-              error={errors.password}
-              textFieldType={'password'}
-              name="password"
-            />
-            <Button label={'Войти'} buttonType={'filledBlack'} width={'346px'} onClick={handleLogin} />
-            {loading && <div>Загрузка...</div>}
-            {error && <div className={styles.error}>{error}</div>}
-          </div>
+          <PasswordAuth
+            onClose={onClose}
+            value={formData.password}
+            handleLogin={handleLogin}
+            error={errors.password}
+            handleChange={handleChange}
+          />
         );
       case 'register':
         return (
@@ -193,9 +165,5 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
     }
   };
 
-  return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      {renderStepContent()}
-    </Modal>
-  );
+  return <> {renderStepContent()}</>;
 };

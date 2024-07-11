@@ -5,3 +5,6 @@ export { CreateEvent } from './CreateEvent/CreateEvent';
 export { Calendar } from './Calendar/Calendar';
 export { Success } from './Success/Success';
 export { ErrorPopup } from './ErrorPopup/ErrorPopup';
+export { Header } from './Header/Header';
+export { EmailAuth } from './EmailAuth/EmailAuth';
+export { PasswordAuth } from './PasswordAuth/PasswordAuth';

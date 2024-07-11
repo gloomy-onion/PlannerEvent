@@ -90,7 +90,7 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal>
       <div className={styles.eventDescriptionContainer}>
         <div className={styles.closeBtn}>
           <Button buttonType="close" onClick={onClose} />
