@@ -1,14 +1,14 @@
 import React from 'react';
-import styles from '../Auth/Auth.module.scss';
+import styles from './PasswordAuth.module.scss';
 import { Button, Modal, TextField, Typography } from '../../ui-kit';
 import { useAuth } from '../../context/AuthContext';
 
 type PasswordAuthProps = {
-  onClose: () => void;
-  handleLogin: () => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
-  error: string | null;
+  onClose?: () => void;
+  handleLogin?: () => void;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  error?: string | null;
 };
 
 export const PasswordAuth = ({ onClose, value, handleLogin, handleChange, error }: PasswordAuthProps) => {

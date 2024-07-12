@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_TOKEN = localStorage.getItem('token');
+export const TOKEN = localStorage.getItem('token');
 
 export const BASE_URL = 'https://planner.rdclr.ru/api';
 

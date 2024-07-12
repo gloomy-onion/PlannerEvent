@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 import { useAuth } from './AuthContext';
-import { api, API_TOKEN } from '../api/api';
+import { api, TOKEN } from '../api/api';
 
 export type CalendarEvent = {
   id: number;
@@ -95,7 +95,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     try {
       await api.post(`/events/${eventId}/join`, {}, {
         headers: {
-          Authorization: `Bearer ${API_TOKEN}`
+          Authorization: `Bearer ${TOKEN}`
         }
       });
       setEvents(prevEvents =>
@@ -116,7 +116,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     try {
       await api.post(`/events/${eventId}/leave`, {}, {
         headers: {
-          Authorization: `Bearer ${API_TOKEN}`
+          Authorization: `Bearer ${TOKEN}`
         }
       });
       await fetchEvents();
@@ -133,7 +133,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     try {
       await api.delete(`/events/${eventId}`, {
         headers: {
-          Authorization: `Bearer ${API_TOKEN}`
+          Authorization: `Bearer ${TOKEN}`
         }
       });
       setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
@@ -146,7 +146,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
 
   useEffect(() => {
     fetchEvents();
-  }, [user]);
+  }, []);
 
   return (
     <EventsContext.Provider value={{ events, loading, error, fetchEvents, createEvent, joinEvent, deleteEvent, leaveEvent }}>

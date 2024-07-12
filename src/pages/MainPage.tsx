@@ -1,19 +1,13 @@
 import React from 'react';
-
-import { API_TOKEN } from '../api/api';
 import { Calendar } from '../modules';
-
-const isAuth = (): boolean => {
-
-  return !!API_TOKEN && API_TOKEN.length > 0;
-};
+import { useAuth } from '../context/AuthContext';
 
 export const MainPage = () => {
+  const { user } = useAuth();
 
   return (
     <>
-      <Calendar isAuth={isAuth()}  />
+      <Calendar isAuth={Boolean(user)} />
     </>
   );
 };
-

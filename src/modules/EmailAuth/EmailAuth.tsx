@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import styles from '../Auth/Auth.module.scss';
+import React from 'react';
+import styles from './EmailAuth.module.scss';
 import { Button, Modal, TextField, Typography } from '../../ui-kit';
 import { useAuth } from '../../context/AuthContext';
 
 type EmailAuthProps = {
-  onClose: () => void;
-  handleNext: () => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
-  error: string | null;
+  onClose?: () => void;
+  handleNext?: () => void;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  error?: string | null;
 }
 
 export const EmailAuth = ({onClose, handleNext, handleChange, error, value} : EmailAuthProps) => {

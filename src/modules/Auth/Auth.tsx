@@ -149,7 +149,6 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       case 'register':
         return (
           <Registration
-            isOpen={isOpen}
             onClose={onClose}
             userName={formData.userName}
             password={formData.password}

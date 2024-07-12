@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 
 import styles from './CreateEvent.module.scss';
-import { api, API_TOKEN } from '../../api/api';
+import { api, TOKEN } from '../../api/api';
 import { useEvents } from '../../context/EventContext';
 import {
   AddPhoto,
@@ -38,15 +38,11 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [organizer, setOrganizer] = useState<string | null>(null);
 
-  useEffect(() => {
-    getOrganizer();
-  }, []);
-
   const getOrganizer = async () => {
     try {
       const response = await api.get('users/me', {
         headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
+          Authorization: `Bearer ${TOKEN}`,
         },
       });
 

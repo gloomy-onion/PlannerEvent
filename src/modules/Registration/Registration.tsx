@@ -4,19 +4,17 @@ import styles from './Registration.module.scss';
 import { Button, Information, Modal, TextField, Typography } from '../../ui-kit';
 
 type RegistrationProps = {
-  userName: string;
-  password: string;
-  passwordError: string | null;
-  confirmPassword: string;
-  registerError: string | null;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleRegister: () => void;
-  isOpen: boolean;
-  onClose: () => void;
+  userName?: string;
+  password?: string;
+  passwordError?: string | null;
+  confirmPassword?: string;
+  registerError?: string | null;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleRegister?: () => void;
+  onClose?: () => void;
 };
 
 export const Registration = ({
-  isOpen,
   onClose,
   userName,
   password,

@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { api, API_TOKEN } from '../api/api';
+import { api, TOKEN } from '../api/api';
+import { fetchMe } from './auth';
 
 type User = {
   id: number;
@@ -96,14 +97,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const getMe = async () => {
+    if (!TOKEN) {
+      return;
+    }
     try {
-      const response = await api.get('users/me', {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-        },
-      });
+      const { data } = await fetchMe();
 
-      return response.data;
+      setUser(data);
     } catch (error) {
       setError('Что-то пошло не так, попробуйте позже');
       throw error;

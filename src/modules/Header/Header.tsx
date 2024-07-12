@@ -3,6 +3,7 @@ import styles from './Header.module.scss';
 import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { Button, Typography } from '../../ui-kit';
 import Avatar from '../../assets/img/Avatar.png';
+import { useAuth } from '../../context/AuthContext';
 
 type HeaderProps = {
   isAuth: boolean;
@@ -22,6 +23,8 @@ export const Header = ({
   handleNextMonth,
   getMonthYear,
 }: HeaderProps) => {
+  const { user } = useAuth();
+
   return (
     <div className={styles.header}>
       <div className={styles.headerLeft}>
@@ -49,7 +52,7 @@ export const Header = ({
         ) : (
           <div className={styles.isAuthBlock}>
             <Button buttonType={'add'} onClick={openCreateEventModal} />
-            <img alt={'Avatar'} src={Avatar} width={'80px'} />
+            <img alt={'Avatar'} src={user?.profilePicture || Avatar} width={'80px'} />
           </div>
         )}
       </div>
