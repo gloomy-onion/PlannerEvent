@@ -13,17 +13,14 @@ import {
   TextField,
   Typography,
 } from '../../ui-kit';
-import { ErrorPopup } from '../ErrorPopup/ErrorPopup';
+import { useStage } from '../../context/StageContext';
 
 type CreateEventProps = {
-  isOpen: boolean;
-  onClose: () => void;
 };
 
-export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => {
+export const CreateEvent: React.FC<CreateEventProps> = ({ }) => {
+  const {  setStage, closeStage } = useStage();
   const { createEvent } = useEvents();
-  const [isErrorModalOpen, setErrorModalOpen] = useState(false);
-  const [errorText, setErrorText] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -48,7 +45,7 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
 
       setOrganizer(response.data.username);
     } catch (error) {
-      setErrorText('Произошла ошибка при создании события. Пожалуйста, попробуйте позже.');
+      setStage('error');
     }
   };
   const handleDateChange = ( dates: [(Date | null), (Date | null )]) => {
@@ -61,9 +58,6 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
       dateEnd: end ? end.toISOString() : '',
     }));
   };
-
-  const openErrorModal = () => setErrorModalOpen(true);
-  const closeErrorModal = () => setErrorModalOpen(false);
 
   const onDescriptionValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
     setFormData({ ...formData, description: e.target.value });
@@ -81,14 +75,9 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
         photos: [],
       });
     } catch (error) {
-      setErrorText('Произошла ошибка при создании события. Пожалуйста, попробуйте позже.');
-      openErrorModal();
+      setStage('error');
     }
   };
-
-  if (!isOpen) {
-    return null;
-  }
 
   return (
     <Modal>
@@ -97,7 +86,7 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
           Создание события
         </Typography>
         <div className={styles.closeBtn}>
-          <Button buttonType="close" onClick={onClose} />
+          <Button buttonType="close" onClick={closeStage} />
         </div>
         <div className={styles.createEventInputs}>
           <div className={styles.createEventLeft}>
@@ -143,7 +132,6 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => 
         </div>
         <Button label={'Создать'} onClick={handleSubmit} />
       </div>
-      <ErrorPopup isOpen={isErrorModalOpen} onClose={closeErrorModal} description={errorText} />
     </Modal>
   );
 };

@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import { validateEmail } from '../../api/helpers';
 import { useAuth } from '../../context/AuthContext';
+import { useStage } from '../../context/StageContext';
 import { Registration } from '../Registration/Registration';
 import { EmailAuth } from '../EmailAuth/EmailAuth';
 import { PasswordAuth } from '../PasswordAuth/PasswordAuth';
-
-type AuthProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
 
 type ErrorsState = {
   email: string | null;
@@ -16,9 +12,9 @@ type ErrorsState = {
   confirmPassword: string | null;
 };
 
-export const Auth = ({ isOpen, onClose }: AuthProps) => {
+export const Auth = () => {
   const { checkUserExists, login, register, error } = useAuth();
-  const [step, setStep] = useState<'email' | 'password' | 'register'>('email');
+  const { stage, setStage, closeStage } = useStage();
   const [formData, setFormData] = useState({
     userName: '',
     email: '',
@@ -53,12 +49,16 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       return;
     }
 
-    const userExists = await checkUserExists(formData.email);
+    try {
+      const userExists = await checkUserExists(formData.email);
 
-    if (userExists) {
-      setStep('password');
-    } else {
-      setStep('register');
+      if (userExists) {
+        setStage('password');
+      } else {
+        setStage('register');
+      }
+    } catch (err) {
+      console.error('Error checking user existence:', err);
     }
   };
 
@@ -77,7 +77,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
 
     await login(formData.email, formData.password);
     if (!error) {
-      onClose();
+      closeStage();
     }
   };
 
@@ -112,7 +112,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
 
     await register(formData.email, formData.password, formData.userName);
     if (!error) {
-      onClose();
+      closeStage();
     }
 
     setFormData({
@@ -121,15 +121,14 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       password: '',
       confirmPassword: '',
     });
-    setStep('email');
+    setStage('email');
   };
 
   const renderStepContent = () => {
-    switch (step) {
+    switch (stage) {
       case 'email':
         return (
           <EmailAuth
-            onClose={onClose}
             handleChange={handleChange}
             handleNext={handleNext}
             value={formData.email}
@@ -139,7 +138,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       case 'password':
         return (
           <PasswordAuth
-            onClose={onClose}
+            onClose={closeStage}
             value={formData.password}
             handleLogin={handleLogin}
             error={errors.password}
@@ -149,7 +148,7 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
       case 'register':
         return (
           <Registration
-            onClose={onClose}
+            onClose={closeStage}
             userName={formData.userName}
             password={formData.password}
             confirmPassword={formData.confirmPassword}
@@ -164,5 +163,5 @@ export const Auth = ({ isOpen, onClose }: AuthProps) => {
     }
   };
 
-  return <> {renderStepContent()}</>;
+  return renderStepContent();
 };

@@ -61,7 +61,7 @@ export const StageProvider = ({ children }: StageProviderProps) => {
 
   return (
     <StageContext.Provider value={{ stage, setStage, stageIsActive: Boolean(stage), closeStage }}>
-      {stage ? STAGE[stage]({ closeStage }) : children}
+      {children} {stage && STAGE[stage]({ closeStage })}
     </StageContext.Provider>
   );
 };

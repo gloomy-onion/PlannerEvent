@@ -2,22 +2,22 @@ import React from 'react';
 
 import styles from './ErrorPopup.module.scss';
 import { Button, Modal, Typography } from '../../ui-kit';
+import { useStage } from '../../context/StageContext';
 
 type ErrorPopupProps = {
-  isOpen: boolean;
-  onClose: () => void;
   description?: string;
 };
 
-export const ErrorPopup = ({ isOpen, onClose, description }: ErrorPopupProps) => {
-  if (!isOpen) {
-    return null;
-  }
+export const ErrorPopup = ({ description }: ErrorPopupProps) => {
+  const { closeStage } = useStage();
+  const closeErrorStage = () => {
+    closeStage();
+  };
   return (
     <Modal>
       <div className={styles.errorContainer}>
         <div className={styles.closeBtn}>
-          <Button buttonType={'close'} onClick={onClose} />
+          <Button buttonType={'close'} onClick={closeErrorStage} />
         </div>
         <div className={styles.errorDetails}>
           <Typography font={'RedCollar'} as={'h2'} size={'title'} className={styles.errorTitle}>
@@ -30,7 +30,7 @@ export const ErrorPopup = ({ isOpen, onClose, description }: ErrorPopupProps) =>
             Попробуйте позже
           </Typography>
         </div>
-        <Button label={'Хорошо'} width={'147px'} buttonType={'filledBlack'} onClick={onClose} />
+        <Button label={'Хорошо'} width={'147px'} buttonType={'filledBlack'} onClick={closeErrorStage} />
       </div>
     </Modal>
   );

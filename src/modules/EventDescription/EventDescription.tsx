@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import styles from './EventDescription.module.scss';
 import { useEvents } from '../../context/EventContext';
 import { Button, EventDatePlace, ImageCarousel, Modal, Participant, Typography } from '../../ui-kit';
-import { Auth } from '../Auth/Auth';
 import { ErrorPopup } from '../ErrorPopup/ErrorPopup';
+import { useStage } from '../../context/StageContext';
+import { formatEventDate } from './helpers';
 
 type Photo = {
   id: number;
@@ -28,7 +29,6 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
   eventLocation,
   eventLabel,
   description,
-  isOpen,
   onClose,
   isAuth,
   selectedEventDate,
@@ -36,47 +36,17 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
   eventId,
 }) => {
   const { joinEvent, leaveEvent } = useEvents();
-  const [isErrorModalOpen, setErrorModalOpen] = useState(false);
+  const { setStage } = useStage();
   const [subscribedEvent, setSubscribedEvent] = useState(true);
-  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
-  const openAuthModal = () => setAuthModalOpen(true);
-  const closeAuthModal = () => setAuthModalOpen(false);
-  if (!isOpen) {
-    return null;
-  }
-
-  const eventDate = new Date(selectedEventDate);
-  const day = eventDate.getDate();
-  const monthIndex = eventDate.getMonth();
-  const monthsDeclension = [
-    'января',
-    'февраля',
-    'марта',
-    'апреля',
-    'мая',
-    'июня',
-    'июля',
-    'августа',
-    'сентября',
-    'октября',
-    'ноября',
-    'декабря',
-  ];
-  const month = monthsDeclension[monthIndex];
-  const formattedDate = `${day} ${month}`;
-  const weekdays = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-  const weekday = weekdays[eventDate.getDay()];
-  const time = eventDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-
-  const openErrorModal = () => setErrorModalOpen(true);
-  const closeErrorModal = () => setErrorModalOpen(false);
+  const openAuthModal = () => setStage('email');
+  const { formattedDate, weekday, time } = formatEventDate(selectedEventDate);
 
   const handleJoinEvent = async () => {
     try {
       await joinEvent(eventId);
       setSubscribedEvent(true);
     } catch (error) {
-      openErrorModal();
+      setStage('error');
     }
   };
 
@@ -85,7 +55,7 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
       await leaveEvent(eventId);
       setSubscribedEvent(false);
     } catch (error) {
-      openErrorModal();
+      setStage('error');
     }
   };
 
@@ -136,8 +106,7 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
           </div>
         )}
       </div>
-      <ErrorPopup isOpen={isErrorModalOpen} onClose={closeErrorModal} />
-      <Auth isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+      <ErrorPopup />
     </Modal>
   );
 };

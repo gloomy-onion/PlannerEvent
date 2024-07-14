@@ -43,9 +43,21 @@ export const TextField = ({
     return textFieldType;
   };
 
+  const handleBlur = () => {
+   if (value !== '') {
+     setIsFocused(true)
+   } else {
+     setIsFocused(false)
+   }
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
   return (
     <div className={styles.textField}>
-      <div className={styles.textFieldInputCover}>
+      <div onFocus={handleFocus}  className={styles.textFieldInputCover}>
         <input
           name={name}
           type={getInputType()}
@@ -53,22 +65,12 @@ export const TextField = ({
           className={styles.floatingInput}
           value={value}
           onChange={onChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => {
-            if (!value) {
-              setIsFocused(false);
-            }
-          }}
+          onBlur={handleBlur}
         />
         <Typography
           color={'gray'}
-          style={{
-            left: '16px',
-            top: isFocused ? '1px' : '20px',
-            fontSize: isFocused ? '14px' : '18px',
-            position: 'absolute',
-            background: 'white',
-          }}
+          className={isFocused || value ? styles.focusedLabel : styles.notFocusedLabel}
+          size={isFocused ? 's' : 'm'}
         >
           {label}
         </Typography>

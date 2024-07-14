@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const TOKEN = localStorage.getItem('token');
 
-export const BASE_URL = 'https://planner.rdclr.ru/api';
+export const BASE_URL = 'https://localhost:1337/api';
 
 export const api = axios.create({
   baseURL: BASE_URL,

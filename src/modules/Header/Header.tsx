@@ -4,10 +4,10 @@ import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { Button, Typography } from '../../ui-kit';
 import Avatar from '../../assets/img/Avatar.png';
 import { useAuth } from '../../context/AuthContext';
+import { useStage } from '../../context/StageContext';
 
 type HeaderProps = {
   isAuth: boolean;
-  openAuthModal: () => void;
   getMonthYear: () => string;
   openCreateEventModal: () => void;
   handlePrevMonth: () => void;
@@ -17,13 +17,18 @@ type HeaderProps = {
 
 export const Header = ({
   openCreateEventModal,
-  openAuthModal,
   isAuth,
   handlePrevMonth,
   handleNextMonth,
   getMonthYear,
 }: HeaderProps) => {
   const { user } = useAuth();
+  const { setStage } = useStage();
+
+  const openEmailStage = () => {
+    setStage('email');
+  };
+
 
   return (
     <div className={styles.header}>
@@ -48,7 +53,7 @@ export const Header = ({
           <button onClick={handleNextMonth} className={styles.nextButton} />
         </div>
         {!isAuth ? (
-          <Button label={'Войти'} onClick={openAuthModal} />
+          <Button label={'Войти'} onClick={openEmailStage} />
         ) : (
           <div className={styles.isAuthBlock}>
             <Button buttonType={'add'} onClick={openCreateEventModal} />

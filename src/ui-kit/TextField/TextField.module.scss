@@ -111,3 +111,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   top: 16px;
   cursor: pointer;
 }
+
+.focusedLabel {
+  left: 16px;
+  top: 5px;
+  position: absolute;
+}
+
+.notFocusedLabel {
+  left: 16px;
+  top: 20px;
+  position: absolute;
+}
