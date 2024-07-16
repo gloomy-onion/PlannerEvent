@@ -15,32 +15,30 @@ import {
 } from './helpers';
 import { CalendarEvent, useEvents } from '../../context/EventContext';
 import { DayTemplate, EventTag } from '../../ui-kit';
-import { CreateEvent } from '../CreateEvent/CreateEvent';
 import { EventDescription } from '../EventDescription/EventDescription';
 import { Header } from '../Header/Header';
+import { useStage } from '../../context/StageContext';
 
 type CalendarProps = {
   isAuth: boolean;
 };
 
 export const Calendar = ({ isAuth }: CalendarProps) => {
+  const {  setStage, closeStage } = useStage();
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth());
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
-  const [isCreateEventModalOpen, setCreateEventModalOpen] = useState(false);
-  const [isEventDescriptionModalOpen, setEventDescriptionModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const { events } = useEvents();
 
-  const openCreateEventModal = () => setCreateEventModalOpen(true);
-  const closeCreateEventModal = () => setCreateEventModalOpen(false);
+  const openCreateEventModal = () => setStage('createEvent');
 
   const openEventDescriptionModal = (event: CalendarEvent) => {
     setSelectedEvent(event);
-    setEventDescriptionModalOpen(true);
+    setStage('eventDescription');
   };
   const closeEventDescriptionModal = () => {
     setSelectedEvent(null);
-    setEventDescriptionModalOpen(false);
+    closeStage();
   };
 
   const getMonthYear = () => {
@@ -99,7 +97,6 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
         </div>
         <div className={cn(styles.body, styles.days)}>{renderCalendar()}</div>
       </div>
-      <CreateEvent isOpen={isCreateEventModalOpen} onClose={closeCreateEventModal} />
       {selectedEvent && (
         <EventDescription
           eventId={selectedEvent.id}
@@ -109,7 +106,6 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
           eventLocation={selectedEvent.location}
           eventLabel={selectedEvent.title}
           description={selectedEvent.description}
-          isOpen={isEventDescriptionModalOpen}
           onClose={closeEventDescriptionModal}
         />
       )}

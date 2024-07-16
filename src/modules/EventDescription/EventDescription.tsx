@@ -18,7 +18,6 @@ type EventDescriptionProps = {
   isAuth: boolean;
   eventLabel: string;
   description: string;
-  isOpen: boolean;
   onClose: () => void;
   selectedEventDate: string;
   photos: Photo[];

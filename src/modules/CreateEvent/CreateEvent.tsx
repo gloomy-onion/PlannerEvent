@@ -1,7 +1,6 @@
-import React, {  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styles from './CreateEvent.module.scss';
-import { api, TOKEN } from '../../api/api';
 import { useEvents } from '../../context/EventContext';
 import {
   AddPhoto,
@@ -14,12 +13,12 @@ import {
   Typography,
 } from '../../ui-kit';
 import { useStage } from '../../context/StageContext';
+import { fetchMe } from '../../context/auth';
 
-type CreateEventProps = {
-};
+type CreateEventProps = {};
 
-export const CreateEvent: React.FC<CreateEventProps> = ({ }) => {
-  const {  setStage, closeStage } = useStage();
+export const CreateEvent: React.FC<CreateEventProps> = ({}) => {
+  const { setStage, closeStage } = useStage();
   const { createEvent } = useEvents();
   const [formData, setFormData] = useState({
     title: '',
@@ -35,20 +34,20 @@ export const CreateEvent: React.FC<CreateEventProps> = ({ }) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [organizer, setOrganizer] = useState<string | null>(null);
 
-  const getOrganizer = async () => {
-    try {
-      const response = await api.get('users/me', {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      });
+  useEffect(() => {
+    const getOrganizer = async () => {
+      try {
+        const response = await fetchMe();
+        setOrganizer(response.data.username);
+      } catch (error) {
+        setStage('error');
+      }
+    };
 
-      setOrganizer(response.data.username);
-    } catch (error) {
-      setStage('error');
-    }
-  };
-  const handleDateChange = ( dates: [(Date | null), (Date | null )]) => {
+    getOrganizer();
+  }, []);
+
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
