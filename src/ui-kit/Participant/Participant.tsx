@@ -1,18 +1,23 @@
 import React from 'react';
 
 import styles from './Participant.module.scss';
+import Avatar from '../../assets/img/Avatar.png';
 import { Typography } from '../Typography/Typography';
 
 type ParticipantProps = {
   name: string;
-  photo: string;
+  photo: string | undefined;
   organizer?: boolean;
 };
 
 export const Participant = ({ name, photo, organizer = false }: ParticipantProps) => {
   return (
     <div className={styles.participantContainer}>
-      <img src={photo} alt={'Avatar'} className={styles.profilePicture} />
+      {photo ? (
+        <img src={photo} alt={name} className={styles.profilePicture} />
+      ) : (
+        <img src={Avatar} alt="Default Avatar" className={styles.profilePicture} />
+      )}
       <div>
         <Typography weight={500} size={'m'} color={'black'}>
           {name}
