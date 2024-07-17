@@ -45,9 +45,9 @@ export const TextField = ({
 
   const handleBlur = () => {
    if (value !== '') {
-     setIsFocused(true)
+     setIsFocused(true);
    } else {
-     setIsFocused(false)
+     setIsFocused(false);
    }
   };
 

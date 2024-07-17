@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+
 import styles from './Registration.module.scss';
-import { Button, Information, Modal, TextField, Typography } from '../../ui-kit';
 import { useAuth } from '../../context/AuthContext';
 import { useStage } from '../../context/StageContext';
+import { Button, Information, Modal, TextField, Typography } from '../../ui-kit';
 
 export const Registration = () => {
   const { register, error, loading } = useAuth();
-  const { closeStage } = useStage();
+  const { closeStage, setStage } = useStage();
   const { email } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -62,7 +63,7 @@ export const Registration = () => {
       }
       setFormData({ userName: '', password: '', confirmPassword: '' });
     } catch (err) {
-      console.error('Error during registration:', err);
+      setStage('error')
     }
   };
 

@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 import { useAuth } from './AuthContext';
-import { api, TOKEN } from '../api/api';
+import { api, httpClient, TOKEN } from '../api/api';
 
 export type CalendarEvent = {
   id: number;
@@ -50,7 +50,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ data: CalendarEvent[] }> = await api.get('/events');
+      const response: AxiosResponse<{ data: CalendarEvent[] }> = await api.getEvents();
       const allEvents = response.data.data;
 
       const now = new Date().toISOString();
@@ -78,7 +78,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ data: CalendarEvent }> = await api.post('/events', newEvent);
+      const response: AxiosResponse<{ data: CalendarEvent }> = await httpClient.post('/events', newEvent);
       setEvents(prevEvents => [...prevEvents, { ...response.data.data, type: 'created' }]);
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -93,7 +93,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.post(`/events/${eventId}/join`, {}, {
+      await httpClient.post(`/events/${eventId}/join`, {}, {
         headers: {
           Authorization: `Bearer ${TOKEN}`
         }
@@ -103,7 +103,6 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
           event.id === eventId ? { ...event, type: 'accede' } : event
         )
       );
-      await fetchEvents();
     } catch (err) {
       setError('Не удалось присоединиться к событию, попробуйте позже');
     } finally {
@@ -114,12 +113,11 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.post(`/events/${eventId}/leave`, {}, {
+      await httpClient.post(`/events/${eventId}/leave`, {}, {
         headers: {
           Authorization: `Bearer ${TOKEN}`
         }
       });
-      await fetchEvents();
     } catch (err) {
       setError('Не удалось присоединиться к событию, попробуйте позже');
     } finally {
@@ -131,7 +129,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await api.delete(`/events/${eventId}`, {
+      await httpClient.delete(`/events/${eventId}`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`
         }

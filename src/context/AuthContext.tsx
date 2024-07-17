@@ -1,8 +1,8 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 import { api, TOKEN } from '../api/api';
-import { fetchMe } from './auth';
+import { LocalStorageKeys, localStorageService } from '../services/localStorage';
 
 type User = {
   id: number;
@@ -35,12 +35,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get('/users');
+      const response = await api.getUsers();
       for (const user of response.data) {
         if (user.email === email) {
+
           return true;
         }
       }
+
       return false;
     } catch (err) {
       setError('Что-то пошло не так, попробуйте позже');
@@ -50,16 +52,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const handleLogin = async (email: string, password: string): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ jwt: string; user: User }> = await api.post('/auth/local', {
-        identifier: email,
-        password,
-      });
+      const response: AxiosResponse<{ jwt: string; user: User }> = await api.login(email, password);
       setUser(response.data.user);
-      localStorage.setItem('token', response.data.jwt);
+      localStorageService.set(LocalStorageKeys.TOKEN, response.data.jwt);
     } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.message || 'Неверный пароль');
@@ -71,17 +70,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const register = async (email: string, password: string, username: string): Promise<void> => {
+  const handleRegister = async (email: string, password: string, username: string): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ jwt: string; user: User }> = await api.post('/auth/local/register', {
-        email,
-        password,
-        username,
-      });
+      const response: AxiosResponse<{ jwt: string; user: User }> = await api.register(email, password, username);
       setUser(response.data.user);
-      localStorage.setItem('token', response.data.jwt);
+      localStorageService.set(LocalStorageKeys.TOKEN, response.data.jwt);
     } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.message || 'Что-то пошло не так, попробуйте позже');
@@ -93,16 +88,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getMe = async () => {
+  const handleGetMe = async () => {
     if (!TOKEN) {
       return;
     }
     try {
-      const { data } = await fetchMe();
+      const { data } = await api.fetchMe();
       setUser(data);
     } catch (error) {
       setError('Что-то пошло не так, попробуйте позже');
-      throw error;
     }
   };
 
@@ -114,10 +108,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error,
         email,
         setEmail,
-        login,
-        register,
+        login: handleLogin,
+        register: handleRegister,
         checkUserExists,
-        getMe,
+        getMe: handleGetMe,
       }}
     >
       {children}
@@ -130,5 +124,6 @@ export const useAuth = (): AuthContextType => {
   if (!context) {
     throw new Error('useAuth должен быть внутри AuthProvider');
   }
+
   return context;
 };

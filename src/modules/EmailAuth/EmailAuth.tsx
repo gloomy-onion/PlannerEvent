@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+
 import styles from './EmailAuth.module.scss';
-import { Button, Modal, TextField, Typography } from '../../ui-kit';
+import { validateEmail } from '../../api/helpers';
 import { useAuth } from '../../context/AuthContext';
 import { useStage } from '../../context/StageContext';
-import { validateEmail } from '../../api/helpers';
+import { Button, Modal, TextField, Typography } from '../../ui-kit';
 
 export const EmailAuth = () => {
   const { checkUserExists, loading, error, setEmail, email } = useAuth();
@@ -29,7 +30,7 @@ export const EmailAuth = () => {
         setStage('register');
       }
     } catch (err) {
-      console.error('Error checking user existence:', err);
+      setStage('error');
     }
   };
 

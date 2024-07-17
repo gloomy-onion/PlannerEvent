@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import cn from 'classnames';
+import React, { useState } from 'react';
+
 import styles from './Calendar.module.scss';
 import { daysInWeek, months } from './constants';
 import {
@@ -14,10 +15,9 @@ import {
   today,
 } from './helpers';
 import { CalendarEvent, useEvents } from '../../context/EventContext';
-import { DayTemplate, EventTag } from '../../ui-kit';
+import { useStage } from '../../context/StageContext';
 import { EventDescription } from '../EventDescription/EventDescription';
 import { Header } from '../Header/Header';
-import { useStage } from '../../context/StageContext';
 
 type CalendarProps = {
   isAuth: boolean;
@@ -44,6 +44,7 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
   const getMonthYear = () => {
     const monthName = months[currentMonth];
     const displayYear = currentYear !== today.getFullYear() ? ` ${currentYear}` : '';
+
     return `${monthName}${displayYear}`;
   };
 
@@ -59,19 +60,16 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
     const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
     const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
 
-    const prevMonthDays = renderPrevMonthDays(leadingEmptyDays, prevMonth, prevYear, daysInPrevMonth, DayTemplate);
+    const prevMonthDays = renderPrevMonthDays(leadingEmptyDays, prevMonth, prevYear, daysInPrevMonth);
     const totalDays = prevMonthDays.length + daysInCurrentMonth;
     const trailingEmptyDays = totalDays % 7 === 0 ? 0 : 7 - (totalDays % 7);
-    const nextMonthDays = renderNextMonthDays(trailingEmptyDays, nextMonth, nextYear, DayTemplate);
+    const nextMonthDays = renderNextMonthDays(trailingEmptyDays, nextMonth, nextYear);
     const currentMonthDays = renderCurrentMonthDays(
       daysInCurrentMonth,
       currentYear,
       currentMonth,
       (day) => getEventsForDay(day, events, currentYear, currentMonth),
       openEventDescriptionModal,
-      DayTemplate,
-      EventTag,
-      styles,
     );
 
     return [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
@@ -83,7 +81,6 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
         isAuth={isAuth}
         handlePrevMonth={() => handlePrevMonth(currentMonth, currentYear, setCurrentMonth, setCurrentYear)}
         handleNextMonth={() => handleNextMonth(currentMonth, currentYear, setCurrentMonth, setCurrentYear)}
-        currentYear={currentYear}
         openCreateEventModal={openCreateEventModal}
         getMonthYear={getMonthYear}
       />

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { CalendarEvent } from '../../context/EventContext';
+import { DayTemplate, EventTag } from '../../ui-kit';
 
 export const daysInMonth = (month: number, year: number): number => {
   return new Date(year, month + 1, 0).getDate();
@@ -16,6 +18,7 @@ export const getEventsForDay = (
   currentMonth: number,
 ): CalendarEvent[] => {
   const date = new Date(currentYear, currentMonth, day).toISOString().slice(0, 10);
+
   return events.filter((event) => event.dateStart.startsWith(date));
 };
 
@@ -54,7 +57,6 @@ export const renderPrevMonthDays = (
   prevMonth: number,
   prevYear: number,
   daysInPrevMonth: number,
-  DayTemplate: any,
 ): React.JSX.Element[] => {
   return Array.from({ length: leadingEmptyDays }, (_, index) => {
     const day = daysInPrevMonth - leadingEmptyDays + index + 1;
@@ -71,9 +73,6 @@ export const renderCurrentMonthDays = (
   currentMonth: number,
   getEventsForDay: (day: number) => CalendarEvent[],
   openEventDescriptionModal: (event: CalendarEvent) => void,
-  DayTemplate: any,
-  EventTag: any,
-  styles: any,
 ): React.JSX.Element[] => {
   return Array.from({ length: daysInCurrentMonth }, (_, index) => {
     const day = index + 1;
@@ -83,7 +82,7 @@ export const renderCurrentMonthDays = (
 
     return (
       <DayTemplate date={day} weekend={isWeekend} key={day}>
-        <div className={styles.events}>
+        <div>
           {eventsForDay.map((event) => (
             <EventTag
               eventType={event.type}
@@ -102,7 +101,6 @@ export const renderNextMonthDays = (
   trailingEmptyDays: number,
   nextMonth: number,
   nextYear: number,
-  DayTemplate: any,
 ): React.JSX.Element[] => {
   return Array.from({ length: trailingEmptyDays }, (_, index) => {
     const day = index + 1;

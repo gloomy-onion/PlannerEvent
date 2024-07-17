@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
+
 import { CreateEvent, EmailAuth, ErrorPopup, EventDescription, PasswordAuth, Registration, Success } from '../modules';
 
 export type Stage = 'email' | 'password' | 'register' | 'createEvent' | 'error' | 'eventDescription' | 'success' | null;

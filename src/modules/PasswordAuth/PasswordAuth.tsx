@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+
 import styles from './PasswordAuth.module.scss';
-import { Button, Modal, TextField, Typography } from '../../ui-kit';
 import { useAuth } from '../../context/AuthContext';
 import { useStage } from '../../context/StageContext';
+import { Button, Modal, TextField, Typography } from '../../ui-kit';
 
 export const PasswordAuth = () => {
   const { login, error, loading, email } = useAuth();

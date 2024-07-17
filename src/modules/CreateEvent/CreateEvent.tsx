@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-
 import styles from './CreateEvent.module.scss';
+import { useAuth } from '../../context/AuthContext';
 import { useEvents } from '../../context/EventContext';
+import { useStage } from '../../context/StageContext';
 import {
   AddPhoto,
   Button,
@@ -13,12 +14,8 @@ import {
   TextField,
   Typography,
 } from '../../ui-kit';
-import { useStage } from '../../context/StageContext';
-import { useAuth } from '../../context/AuthContext';
 
-type CreateEventProps = {};
-
-export const CreateEvent: React.FC<CreateEventProps> = ({}) => {
+export const CreateEvent = () => {
   const {user} = useAuth();
   const { setStage, closeStage } = useStage();
   const { createEvent } = useEvents();

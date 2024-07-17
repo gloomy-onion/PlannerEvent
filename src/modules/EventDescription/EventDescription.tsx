@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 import styles from './EventDescription.module.scss';
+import { formatEventDate } from './helpers';
 import { useEvents } from '../../context/EventContext';
+import { useStage } from '../../context/StageContext';
 import { Button, EventDatePlace, ImageCarousel, Modal, Participant, Typography } from '../../ui-kit';
 import { ErrorPopup } from '../ErrorPopup/ErrorPopup';
-import { useStage } from '../../context/StageContext';
-import { formatEventDate } from './helpers';
 
 type Photo = {
   id: number;

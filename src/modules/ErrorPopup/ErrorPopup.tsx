@@ -1,8 +1,8 @@
 import React from 'react';
 
 import styles from './ErrorPopup.module.scss';
-import { Button, Modal, Typography } from '../../ui-kit';
 import { useStage } from '../../context/StageContext';
+import { Button, Modal, Typography } from '../../ui-kit';
 
 type ErrorPopupProps = {
   description?: string;
@@ -13,6 +13,7 @@ export const ErrorPopup = ({ description }: ErrorPopupProps) => {
   const closeErrorStage = () => {
     closeStage();
   };
+
   return (
     <Modal>
       <div className={styles.errorContainer}>

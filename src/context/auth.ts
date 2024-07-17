@@ -1,7 +1,7 @@
-import { api, TOKEN } from '../api/api';
+import { httpClient, TOKEN } from '../api/api';
 
 export const fetchMe = () => {
-  return api.get('users/me', {
+  return httpClient.get('users/me', {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
     },

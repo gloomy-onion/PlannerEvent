@@ -1,10 +1,11 @@
 import React from 'react';
+
 import styles from './Header.module.scss';
-import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
-import { Button, Typography } from '../../ui-kit';
 import Avatar from '../../assets/img/Avatar.png';
+import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { useAuth } from '../../context/AuthContext';
 import { useStage } from '../../context/StageContext';
+import { Button, Typography } from '../../ui-kit';
 
 type HeaderProps = {
   isAuth: boolean;
@@ -12,7 +13,6 @@ type HeaderProps = {
   openCreateEventModal: () => void;
   handlePrevMonth: () => void;
   handleNextMonth: () => void;
-  currentYear: number;
 };
 
 export const Header = ({
@@ -28,7 +28,6 @@ export const Header = ({
   const openEmailStage = () => {
     setStage('email');
   };
-
 
   return (
     <div className={styles.header}>
