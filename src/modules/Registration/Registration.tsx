@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styles from './Registration.module.scss';
 import { useAuth } from '../../context/AuthContext';
-import { useStage } from '../../context/StageContext';
+import { Stages, useStage } from '../../context/StageContext';
 import { Button, Information, Modal, TextField, Typography } from '../../ui-kit';
 
 export const Registration = () => {
@@ -63,7 +63,7 @@ export const Registration = () => {
       }
       setFormData({ userName: '', password: '', confirmPassword: '' });
     } catch (err) {
-      setStage('error')
+      setStage(Stages.ERROR);
     }
   };
 
@@ -101,7 +101,7 @@ export const Registration = () => {
           name="confirmPassword"
         />
         <Button
-          label={loading ?  'Загрузка...' : 'Зарегистрироваться' }
+          label={loading ? 'Загрузка...' : 'Зарегистрироваться'}
           buttonType="filledBlack"
           width="346px"
           onClick={handleRegister}

@@ -1,68 +1,75 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { CreateEvent, EmailAuth, ErrorPopup, EventDescription, PasswordAuth, Registration, Success } from '../modules';
+import { CalendarEvent } from './EventContext';
+import {
+  CreateEvent,
+  EmailAuth,
+  ErrorPopup,
+  EventDescription,
+  PasswordAuth,
+  Registration,
+  SuccessCreate,
+  SuccessJoin,
+} from '../modules';
 
-export type Stage = 'email' | 'password' | 'register' | 'createEvent' | 'error' | 'eventDescription' | 'success' | null;
-
-const EmailStage = (props: any) => {
-  return <EmailAuth {...props} />;
-};
-
-const PasswordStage = (props: any) => {
-  return <PasswordAuth {...props} />;
-};
-
-const RegisterStage = (props: any) => {
-  return <Registration {...props} />;
-};
-
-const CreateEventStage = (props: any) => {
-  return <CreateEvent {...props} />;
-};
-
-const ErrorStage = (props: any) => {
-  return <ErrorPopup {...props} />;
-};
-
-const EventDescriptionStage = (props: any) => {
-  return <EventDescription {...props} />;
-};
-
-const SuccessStage = (props: any) => {
-  return <Success {...props} />;
-};
-
-const STAGE: Record<Exclude<Stage, null>, (props: any) => React.JSX.Element> = {
-  email: EmailStage,
-  password: PasswordStage,
-  register: RegisterStage,
-  createEvent: CreateEventStage,
-  error: ErrorStage,
-  eventDescription: EventDescriptionStage,
-  success: SuccessStage,
-};
+export enum Stages {
+  EMAIL = 'email',
+  PASSWORD = 'password',
+  REGISTER = 'register',
+  CREATE_EVENT = 'createEvent',
+  ERROR = 'error',
+  EVENT_DESCRIPTION = 'eventDescription',
+  SUCCESS_CREATE = 'successCreate',
+  SUCCESS_JOIN = 'successJoin',
+  NULL = 'null',
+}
 
 type StageProviderProps = {
   children: ReactNode;
 };
 
 type StageContextType = {
-  stage: Stage;
-  setStage: (stage: Stage) => void;
+  stage: Stages;
+  setStage: (stages: Stages, props?: { event: CalendarEvent | null }) => void;
   stageIsActive: boolean;
   closeStage: () => void;
 };
 
 export const StageContext = createContext<StageContextType | undefined>(undefined);
 
-export const StageProvider = ({ children }: StageProviderProps) => {
-  const [stage, setStage] = useState<Stage>(null);
+const ContentManager = ({ stage }: { stage: Stages }, props: any) => {
+  switch (stage) {
+    case Stages.EMAIL:
+      return <EmailAuth />;
+    case Stages.PASSWORD:
+      return <PasswordAuth />;
+    case Stages.REGISTER:
+      return <Registration />;
+    case Stages.CREATE_EVENT:
+      return <CreateEvent />;
+    case Stages.ERROR:
+      return <ErrorPopup />;
+    case Stages.EVENT_DESCRIPTION:
+      return <EventDescription {...props} />;
+    case Stages.SUCCESS_CREATE:
+      return <SuccessCreate {...props}/>;
+    case Stages.SUCCESS_JOIN:
+      return <SuccessJoin {...props}/>;
+    case Stages.NULL:
+      return null;
+    default:
+      return null;
+  }
+};
 
-  const closeStage = () => setStage(null);
+export const StageProvider = ({ children }: StageProviderProps) => {
+  const [stage, setStage] = useState<Stages>(Stages.NULL);
+
+  const closeStage = () => setStage(Stages.NULL);
 
   return (
     <StageContext.Provider value={{ stage, setStage, stageIsActive: Boolean(stage), closeStage }}>
-      {children} {stage && STAGE[stage]({ closeStage })}
+      {children} {stage && <ContentManager stage={stage} />}
     </StageContext.Provider>
   );
 };

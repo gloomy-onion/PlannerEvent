@@ -15,13 +15,14 @@ export type CalendarEvent = {
   photos: Photo[];
   type: 'created' | 'accede' | 'future' | 'past';
   participants: string[];
-}
+  owner: number | string;
+};
 
 type Photo = {
   id: number;
   name: string;
   url: string;
-}
+};
 
 type EventsContextType = {
   events: CalendarEvent[];
@@ -32,7 +33,9 @@ type EventsContextType = {
   joinEvent: (eventId: number) => Promise<void>;
   deleteEvent: (eventId: number) => Promise<void>;
   leaveEvent: (eventId: number) => Promise<void>;
-}
+  getEvent: (eventId: number) => Promise<CalendarEvent | null>;
+  isParticipant: (eventId: number) => Promise<boolean>;
+};
 
 const EventsContext = createContext<EventsContextType | undefined>(undefined);
 
@@ -55,16 +58,18 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
 
       const now = new Date().toISOString();
 
-      const filteredEvents = allEvents.map(event => {
-        if (user && event.participants.includes(String(user.id))) {
-          return { ...event, type: 'accede' as const };
-        } if (event.dateStart > now) {
-          return { ...event, type: 'future' as const };
-        }
+      const filteredEvents = allEvents
+        .map((event) => {
+          if (user && event.participants.includes(String(user.id))) {
+            return { ...event, type: 'accede' as const };
+          }
+          if (event.dateStart > now) {
+            return { ...event, type: 'future' as const };
+          }
 
-        return { ...event, type: 'past' as const };
-
-      }).filter(event => user ? true : event.type !== 'past') as CalendarEvent[];
+          return { ...event, type: 'past' as const };
+        })
+        .filter((event) => (user ? true : event.type !== 'past')) as CalendarEvent[];
 
       setEvents(filteredEvents);
     } catch (err) {
@@ -74,12 +79,50 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     }
   };
 
+  const getEvent = async (eventId: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response: AxiosResponse<{ data: CalendarEvent }> = await httpClient.get(`/events/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (err) {
+      setError('Не удалось загрузить событие, попробуйте позже');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createEvent = async (newEvent: Partial<CalendarEvent>) => {
     setLoading(true);
     setError(null);
     try {
-      const response: AxiosResponse<{ data: CalendarEvent }> = await httpClient.post('/events', newEvent);
-      setEvents(prevEvents => [...prevEvents, { ...response.data.data, type: 'created' }]);
+      const response: AxiosResponse<{ data: CalendarEvent }> = await httpClient.post(
+        '/events',
+        {
+          data: {
+            dateStart: newEvent.dateStart,
+            dateEnd: newEvent.dateEnd,
+            title: newEvent.title,
+            description: newEvent.description,
+            location: newEvent.location,
+            photos: newEvent.photos?.map((photo) => photo.id),
+            participants: newEvent.participants,
+            owner: user?.id,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        },
+      );
+      setEvents((prevEvents) => [...prevEvents, { ...response.data.data, type: 'created' }]);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError('Произошла ошибка при создании события. Пожалуйста, попробуйте позже.');
@@ -88,20 +131,21 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
       setLoading(false);
     }
   };
-
   const joinEvent = async (eventId: number) => {
     setLoading(true);
     setError(null);
     try {
-      await httpClient.post(`/events/${eventId}/join`, {}, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`
-        }
-      });
-      setEvents(prevEvents =>
-        prevEvents.map(event =>
-          event.id === eventId ? { ...event, type: 'accede' } : event
-        )
+      await httpClient.post(
+        `/events/${eventId}/join`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        },
+      );
+      setEvents((prevEvents) =>
+        prevEvents.map((event) => (event.id === eventId ? { ...event, type: 'accede' } : event)),
       );
     } catch (err) {
       setError('Не удалось присоединиться к событию, попробуйте позже');
@@ -113,16 +157,25 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     setLoading(true);
     setError(null);
     try {
-      await httpClient.post(`/events/${eventId}/leave`, {}, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`
-        }
-      });
+      await httpClient.post(
+        `/events/${eventId}/leave`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        },
+      );
     } catch (err) {
       setError('Не удалось присоединиться к событию, попробуйте позже');
     } finally {
       setLoading(false);
     }
+  };
+
+  const isParticipant = async (eventId: number): Promise<boolean> => {
+    const event = await getEvent(eventId);
+    return event ? event.participants.includes(String(user?.id)) : false;
   };
 
   const deleteEvent = async (eventId: number) => {
@@ -131,10 +184,10 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
     try {
       await httpClient.delete(`/events/${eventId}`, {
         headers: {
-          Authorization: `Bearer ${TOKEN}`
-        }
+          Authorization: `Bearer ${TOKEN}`,
+        },
       });
-      setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
+      setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
     } catch (err) {
       setError('Не удалось удалить событие, попробуйте позже');
     } finally {
@@ -147,7 +200,20 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
   }, []);
 
   return (
-    <EventsContext.Provider value={{ events, loading, error, fetchEvents, createEvent, joinEvent, deleteEvent, leaveEvent }}>
+    <EventsContext.Provider
+      value={{
+        events,
+        loading,
+        error,
+        fetchEvents,
+        createEvent,
+        joinEvent,
+        deleteEvent,
+        leaveEvent,
+        getEvent,
+        isParticipant,
+      }}
+    >
       {children}
     </EventsContext.Provider>
   );

@@ -7,16 +7,13 @@ import {
   daysInMonth,
   firstDayOfMonth,
   getEventsForDay,
-  handleNextMonth,
-  handlePrevMonth,
   renderCurrentMonthDays,
   renderNextMonthDays,
   renderPrevMonthDays,
   today,
 } from './helpers';
-import { CalendarEvent, useEvents } from '../../context/EventContext';
-import { useStage } from '../../context/StageContext';
-import { EventDescription } from '../EventDescription/EventDescription';
+import { useEvents } from '../../context/EventContext';
+import { Stages, useStage } from '../../context/StageContext';
 import { Header } from '../Header/Header';
 
 type CalendarProps = {
@@ -24,22 +21,17 @@ type CalendarProps = {
 };
 
 export const Calendar = ({ isAuth }: CalendarProps) => {
-  const {  setStage, closeStage } = useStage();
+  const { setStage } = useStage();
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth());
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-  const { events } = useEvents();
+  const { events, getEvent } = useEvents();
 
-  const openCreateEventModal = () => setStage('createEvent');
+  const openEventDescriptionModal = async (eventId: number) => {
+    const event = await getEvent(eventId);
+    setStage(Stages.EVENT_DESCRIPTION, { event });
+  };
 
-  const openEventDescriptionModal = (event: CalendarEvent) => {
-    setSelectedEvent(event);
-    setStage('eventDescription');
-  };
-  const closeEventDescriptionModal = () => {
-    setSelectedEvent(null);
-    closeStage();
-  };
+  const openCreateEventModal = () => setStage(Stages.CREATE_EVENT);
 
   const getMonthYear = () => {
     const monthName = months[currentMonth];
@@ -75,12 +67,29 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
     return [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
   };
 
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
   return (
     <div className={styles.calendar}>
       <Header
         isAuth={isAuth}
-        handlePrevMonth={() => handlePrevMonth(currentMonth, currentYear, setCurrentMonth, setCurrentYear)}
-        handleNextMonth={() => handleNextMonth(currentMonth, currentYear, setCurrentMonth, setCurrentYear)}
+        handlePrevMonth={handlePrevMonth}
+        handleNextMonth={handleNextMonth}
         openCreateEventModal={openCreateEventModal}
         getMonthYear={getMonthYear}
       />
@@ -94,18 +103,6 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
         </div>
         <div className={cn(styles.body, styles.days)}>{renderCalendar()}</div>
       </div>
-      {selectedEvent && (
-        <EventDescription
-          eventId={selectedEvent.id}
-          photos={selectedEvent.photos}
-          isAuth={isAuth}
-          selectedEventDate={selectedEvent.dateStart}
-          eventLocation={selectedEvent.location}
-          eventLabel={selectedEvent.title}
-          description={selectedEvent.description}
-          onClose={closeEventDescriptionModal}
-        />
-      )}
     </div>
   );
 };

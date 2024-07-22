@@ -1,27 +1,26 @@
 import cn from 'classnames';
 import React from 'react';
 
-import styles from './Success.module.scss';
+import styles from './SuccessJoin.module.scss';
+import { useStage } from '../../context/StageContext';
 import { Button, Modal, Typography } from '../../ui-kit';
 
-type SuccessProps = {
-  successType: 'join' | 'create';
-  onClose: () => void;
-};
+export const SuccessJoin = () => {
 
-export const Success = ({ successType, onClose }: SuccessProps) => {
+  const {closeStage } = useStage();
+
   return (
     <Modal>
-      <div className={cn(styles.successContainer, styles[successType])}>
+      <div className={cn(styles.successContainer)}>
         <div className={styles.closeBtn}>
-          <Button buttonType={'close'} onClick={onClose} />
+          <Button buttonType={'close'} onClick={closeStage} />
         </div>
         <Typography font={'RedCollar'} as={'h2'} size={'title'}>
-          {successType === 'join' ? 'Поздравляем!' : 'Ура!'}
+          Поздравляем!
         </Typography>
         <div>
           <Typography font={'RedCollar'} as={'h4'} size={'m'}>
-            {successType === 'join' ? 'Вы теперь участник события:' : 'Вы добавили новое событие:'}
+           Вы теперь участник события:
           </Typography>
           <Typography font={'RedCollar'} as={'h4'} size={'m'} color={'red'}>
             Название события
@@ -43,7 +42,7 @@ export const Success = ({ successType, onClose }: SuccessProps) => {
             адрес
           </Typography>
         </div>
-        <Button label={'Отлично'} width={'147px'} buttonType={'filledBlack'} />
+        <Button label={'Отлично'} width={'147px'} buttonType={'filledBlack'} onClick={closeStage}/>
       </div>
     </Modal>
   );

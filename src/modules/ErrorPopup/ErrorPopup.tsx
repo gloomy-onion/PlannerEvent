@@ -10,15 +10,12 @@ type ErrorPopupProps = {
 
 export const ErrorPopup = ({ description }: ErrorPopupProps) => {
   const { closeStage } = useStage();
-  const closeErrorStage = () => {
-    closeStage();
-  };
 
   return (
     <Modal>
       <div className={styles.errorContainer}>
         <div className={styles.closeBtn}>
-          <Button buttonType={'close'} onClick={closeErrorStage} />
+          <Button buttonType={'close'} onClick={closeStage} />
         </div>
         <div className={styles.errorDetails}>
           <Typography font={'RedCollar'} as={'h2'} size={'title'} className={styles.errorTitle}>
@@ -31,7 +28,7 @@ export const ErrorPopup = ({ description }: ErrorPopupProps) => {
             Попробуйте позже
           </Typography>
         </div>
-        <Button label={'Хорошо'} width={'147px'} buttonType={'filledBlack'} onClick={closeErrorStage} />
+        <Button label={'Хорошо'} width={'147px'} buttonType={'filledBlack'} onClick={closeStage} />
       </div>
     </Modal>
   );

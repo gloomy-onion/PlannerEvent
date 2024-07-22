@@ -4,7 +4,7 @@ import styles from './Header.module.scss';
 import Avatar from '../../assets/img/Avatar.png';
 import { ReactComponent as Collar } from '../../assets/img/Collar.svg';
 import { useAuth } from '../../context/AuthContext';
-import { useStage } from '../../context/StageContext';
+import { Stages, useStage } from '../../context/StageContext';
 import { Button, Typography } from '../../ui-kit';
 
 type HeaderProps = {
@@ -26,7 +26,7 @@ export const Header = ({
   const { setStage } = useStage();
 
   const openEmailStage = () => {
-    setStage('email');
+    setStage(Stages.EMAIL);
   };
 
   return (

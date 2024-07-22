@@ -1,0 +1,51 @@
+@import '../../variables';
+
+.successContainer {
+  width: 770px;
+  height: 510px;
+  border-radius: 64px;
+  background-size: contain;
+  padding: 95px 75px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: $grayBackground url('../../assets/img/Hand.png') no-repeat right;
+}
+
+
+.successDateDetails {
+  display: flex;
+  flex-direction: row;
+}
+
+.successDate {
+  padding: 0 10px;
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: $gray;
+}
+
+.weekDay {
+  padding: 0 10px 0 0;
+}
+
+.time {
+  padding: 0 0 0 10px;
+}
+
+.closeBtn {
+  top: 40px;
+  left: 690px;
+  position: absolute;
+}
+
+.backgroundPic {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 520px;
+  z-index: 1;
+}

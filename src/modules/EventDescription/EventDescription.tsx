@@ -1,74 +1,40 @@
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 
 import styles from './EventDescription.module.scss';
 import { formatEventDate } from './helpers';
-import { useEvents } from '../../context/EventContext';
-import { useStage } from '../../context/StageContext';
+import { useAuth } from '../../context/AuthContext';
+import { CalendarEvent, useEvents } from '../../context/EventContext';
+import { Stages, useStage } from '../../context/StageContext';
 import { Button, EventDatePlace, ImageCarousel, Modal, Participant, Typography } from '../../ui-kit';
-import { ErrorPopup } from '../ErrorPopup/ErrorPopup';
 
-type Photo = {
-  id: number;
-  name: string;
-  url: string;
-};
-
-type EventDescriptionProps = {
-  eventLocation: string;
-  isAuth: boolean;
-  eventLabel: string;
-  description: string;
-  onClose: () => void;
-  selectedEventDate: string;
-  photos: Photo[];
-  eventId: number;
-};
-
-export const EventDescription: React.FC<EventDescriptionProps> = ({
-  eventLocation,
-  eventLabel,
-  description,
-  onClose,
-  isAuth,
-  selectedEventDate,
-  photos,
-  eventId,
-}) => {
+export const EventDescription: React.FC<CalendarEvent> = ({ location, title, description, photos, id, dateStart }) => {
+  const { user } = useAuth();
   const { joinEvent, leaveEvent } = useEvents();
-  const { setStage } = useStage();
-  const [subscribedEvent, setSubscribedEvent] = useState(true);
-  const openAuthModal = () => setStage('email');
-  const { formattedDate, weekday, time } = formatEventDate(selectedEventDate);
+  const { setStage, closeStage } = useStage();
+  const openAuthModal = () => setStage(Stages.EMAIL);
+  const { formattedDate, weekday, time } = formatEventDate(dateStart);
 
-  const handleJoinEvent = async () => {
-    try {
-      await joinEvent(eventId);
-      setSubscribedEvent(true);
-    } catch (error) {
-      setStage('error');
-    }
+  const [participant, setParticipant] = useState<boolean>(false);
+
+  const handleJoin = () => {
+    joinEvent(id).then(() => setParticipant(true));
   };
 
-  const handleLeaveEvent = async () => {
-    try {
-      await leaveEvent(eventId);
-      setSubscribedEvent(false);
-    } catch (error) {
-      setStage('error');
-    }
+  const handleLeave = () => {
+    leaveEvent(id).then(() => setParticipant(false));
   };
 
   return (
     <Modal>
       <div className={styles.eventDescriptionContainer}>
         <div className={styles.closeBtn}>
-          <Button buttonType="close" onClick={onClose} />
+          <Button buttonType="close" onClick={closeStage} />
         </div>
         <Typography size="xxl" font="RedCollar">
-          {eventLabel}
+          {title}
         </Typography>
         <div className={styles.eventDescriptionUpper}>
-          <EventDatePlace place={eventLocation} date={formattedDate} weekday={weekday} time={time} />
+          <EventDatePlace place={location} date={formattedDate} weekday={weekday} time={time} />
           <div className={styles.eventDescriptionText}>
             <Typography size="l" weight={500} as="body">
               {description}
@@ -86,12 +52,12 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
           />
         </div>
         <ImageCarousel items={photos} />
-        {isAuth ? (
+        {user ? (
           <>
-            {subscribedEvent ? (
-              <Button buttonType={'filledBlack'} label={'Отменить участие'} onClick={() => handleLeaveEvent()} />
+            {participant ? (
+              <Button buttonType={'filledBlack'} label={'Отменить участие'} onClick={() => handleLeave()} />
             ) : (
-              <Button width={'343px'} label={'Присоединиться к событию'} onClick={() => handleJoinEvent()} />
+              <Button width={'343px'} label={'Присоединиться к событию'} onClick={() => handleJoin()} />
             )}
           </>
         ) : (
@@ -105,7 +71,6 @@ export const EventDescription: React.FC<EventDescriptionProps> = ({
           </div>
         )}
       </div>
-      <ErrorPopup />
     </Modal>
   );
 };

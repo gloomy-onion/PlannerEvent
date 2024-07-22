@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styles from './CreateEvent.module.scss';
 import { useAuth } from '../../context/AuthContext';
 import { useEvents } from '../../context/EventContext';
-import { useStage } from '../../context/StageContext';
+import { Stages, useStage } from '../../context/StageContext';
 import {
   AddPhoto,
   Button,
@@ -16,7 +16,7 @@ import {
 } from '../../ui-kit';
 
 export const CreateEvent = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const { setStage, closeStage } = useStage();
   const { createEvent } = useEvents();
   const [formData, setFormData] = useState({
@@ -57,9 +57,13 @@ export const CreateEvent = () => {
         location: formData.location,
         time: formData.time,
         photos: [],
+        owner: user?.id,
       });
     } catch (error) {
-      setStage('error');
+      setStage(Stages.ERROR);
+    } finally {
+      closeStage();
+      setStage(Stages.SUCCESS_CREATE);
     }
   };
 
@@ -105,11 +109,7 @@ export const CreateEvent = () => {
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               />
             </div>
-            <Participant
-              name={user?.username || 'Организатор'}
-              organizer
-              photo={user?.profilePicture}
-            />
+            <Participant name={user?.username || 'Организатор'} organizer photo={user?.profilePicture} />
           </div>
         </div>
         <Button label={'Создать'} onClick={handleSubmit} />

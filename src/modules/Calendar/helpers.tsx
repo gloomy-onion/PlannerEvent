@@ -24,34 +24,6 @@ export const getEventsForDay = (
 
 export const today = new Date();
 
-export const handlePrevMonth = (
-  currentMonth: number,
-  currentYear: number,
-  setCurrentMonth: (month: number) => void,
-  setCurrentYear: (year: number) => void,
-): void => {
-  if (currentMonth === 0) {
-    setCurrentMonth(11);
-    setCurrentYear(currentYear - 1);
-  } else {
-    setCurrentMonth(currentMonth - 1);
-  }
-};
-
-export const handleNextMonth = (
-  currentMonth: number,
-  currentYear: number,
-  setCurrentMonth: (month: number) => void,
-  setCurrentYear: (year: number) => void,
-): void => {
-  if (currentMonth === 11) {
-    setCurrentMonth(0);
-    setCurrentYear(currentYear + 1);
-  } else {
-    setCurrentMonth(currentMonth + 1);
-  }
-};
-
 export const renderPrevMonthDays = (
   leadingEmptyDays: number,
   prevMonth: number,
@@ -72,7 +44,7 @@ export const renderCurrentMonthDays = (
   currentYear: number,
   currentMonth: number,
   getEventsForDay: (day: number) => CalendarEvent[],
-  openEventDescriptionModal: (event: CalendarEvent) => void,
+  openEventDescriptionModal: (eventId: number) => Promise<void>,
 ): React.JSX.Element[] => {
   return Array.from({ length: daysInCurrentMonth }, (_, index) => {
     const day = index + 1;
@@ -85,10 +57,11 @@ export const renderCurrentMonthDays = (
         <div>
           {eventsForDay.map((event) => (
             <EventTag
+              eventId={event.id}
               eventType={event.type}
               eventLabel={event.title}
               key={event.id}
-              onClick={() => openEventDescriptionModal(event)}
+              onClick={() => openEventDescriptionModal(event.id)}
             />
           ))}
         </div>

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styles from './EmailAuth.module.scss';
 import { validateEmail } from '../../api/helpers';
 import { useAuth } from '../../context/AuthContext';
-import { useStage } from '../../context/StageContext';
+import { Stages, useStage } from '../../context/StageContext';
 import { Button, Modal, TextField, Typography } from '../../ui-kit';
 
 export const EmailAuth = () => {
@@ -25,12 +25,12 @@ export const EmailAuth = () => {
     try {
       const userExists = await checkUserExists(email);
       if (userExists) {
-        setStage('password');
+        setStage(Stages.PASSWORD);
       } else {
-        setStage('register');
+        setStage(Stages.REGISTER);
       }
     } catch (err) {
-      setStage('error');
+      setStage(Stages.ERROR);
     }
   };
 
@@ -51,7 +51,12 @@ export const EmailAuth = () => {
           error={localError}
           name="email"
         />
-        <Button label={loading ?  'Загрузка...' : 'Далее' } buttonType={'filledBlack'} width={'346px'} onClick={handleNext} />
+        <Button
+          label={loading ? 'Загрузка...' : 'Далее'}
+          buttonType={'filledBlack'}
+          width={'346px'}
+          onClick={handleNext}
+        />
         {localError && <div className={styles.error}>{localError}</div>}
         {error && <div className={styles.error}>{error}</div>}
       </div>
