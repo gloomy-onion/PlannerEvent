@@ -15,11 +15,22 @@ import {
   Typography,
 } from '../../ui-kit';
 
+type FormData = {
+  title: string;
+  description: string;
+  participants: string;
+  time: string;
+  location: string;
+  photo: string;
+  dateStart: string | null;
+  dateEnd: string | null;
+};
+
 export const CreateEvent = () => {
   const { user } = useAuth();
   const { setStage, closeStage } = useStage();
   const { createEvent } = useEvents();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
     participants: '',
@@ -59,11 +70,11 @@ export const CreateEvent = () => {
         photos: [],
         owner: user?.id,
       });
+      setStage(Stages.SUCCESS_CREATE);
     } catch (error) {
       setStage(Stages.ERROR);
     } finally {
       closeStage();
-      setStage(Stages.SUCCESS_CREATE);
     }
   };
 

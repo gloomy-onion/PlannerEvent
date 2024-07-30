@@ -69,7 +69,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
 
           return { ...event, type: 'past' as const };
         })
-        .filter((event) => (user ? true : event.type !== 'past')) as CalendarEvent[];
+        .filter((event) => (user ? true : event.type )) as CalendarEvent[];
 
       setEvents(filteredEvents);
     } catch (err) {
@@ -105,16 +105,14 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
       const response: AxiosResponse<{ data: CalendarEvent }> = await httpClient.post(
         '/events',
         {
-          data: {
-            dateStart: newEvent.dateStart,
-            dateEnd: newEvent.dateEnd,
-            title: newEvent.title,
-            description: newEvent.description,
-            location: newEvent.location,
-            photos: newEvent.photos?.map((photo) => photo.id),
-            participants: newEvent.participants,
-            owner: user?.id,
-          },
+          dateStart: newEvent.dateStart,
+          dateEnd: newEvent.dateEnd,
+          title: newEvent.title,
+          description: newEvent.description,
+          location: newEvent.location,
+          photos: newEvent.photos?.map((photo) => photo.id),
+          participants: newEvent.participants,
+          owner: user?.id,
         },
         {
           headers: {
@@ -131,6 +129,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
       setLoading(false);
     }
   };
+
   const joinEvent = async (eventId: number) => {
     setLoading(true);
     setError(null);
@@ -153,6 +152,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
       setLoading(false);
     }
   };
+
   const leaveEvent = async (eventId: number) => {
     setLoading(true);
     setError(null);
@@ -175,6 +175,7 @@ export const EventsProvider = ({ children }: EventsProviderProps) => {
 
   const isParticipant = async (eventId: number): Promise<boolean> => {
     const event = await getEvent(eventId);
+
     return event ? event.participants.includes(String(user?.id)) : false;
   };
 

@@ -24,11 +24,13 @@ export const Calendar = ({ isAuth }: CalendarProps) => {
   const { setStage } = useStage();
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth());
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
-  const { events, getEvent } = useEvents();
+  const { events } = useEvents();
 
   const openEventDescriptionModal = async (eventId: number) => {
-    const event = await getEvent(eventId);
-    setStage(Stages.EVENT_DESCRIPTION, { event });
+
+    const event = events.find((e) => e.id === eventId);
+    event && setStage(Stages.EVENT_DESCRIPTION, { event });
+    console.log(event);
   };
 
   const openCreateEventModal = () => setStage(Stages.CREATE_EVENT);

@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 
 import styles from './EventDescription.module.scss';
 import { formatEventDate } from './helpers';
@@ -7,7 +7,8 @@ import { CalendarEvent, useEvents } from '../../context/EventContext';
 import { Stages, useStage } from '../../context/StageContext';
 import { Button, EventDatePlace, ImageCarousel, Modal, Participant, Typography } from '../../ui-kit';
 
-export const EventDescription: React.FC<CalendarEvent> = ({ location, title, description, photos, id, dateStart }) => {
+export const EventDescription: React.FC<{ event: CalendarEvent }> = ({ event }) => {
+  const { location, title, description, photos, id, dateStart } = event;
   const { user } = useAuth();
   const { joinEvent, leaveEvent } = useEvents();
   const { setStage, closeStage } = useStage();
@@ -18,6 +19,7 @@ export const EventDescription: React.FC<CalendarEvent> = ({ location, title, des
 
   const handleJoin = () => {
     joinEvent(id).then(() => setParticipant(true));
+    setStage(Stages.SUCCESS_JOIN);
   };
 
   const handleLeave = () => {

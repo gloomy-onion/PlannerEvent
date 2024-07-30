@@ -37,7 +37,7 @@ type StageContextType = {
 
 export const StageContext = createContext<StageContextType | undefined>(undefined);
 
-const ContentManager = ({ stage }: { stage: Stages }, props: any) => {
+const ContentManager = ({ stage, props }: { stage: Stages; props: any }) => {
   switch (stage) {
     case Stages.EMAIL:
       return <EmailAuth />;
@@ -64,12 +64,16 @@ const ContentManager = ({ stage }: { stage: Stages }, props: any) => {
 
 export const StageProvider = ({ children }: StageProviderProps) => {
   const [stage, setStage] = useState<Stages>(Stages.NULL);
+  const [stageProps, setStageProps] = useState<any>(null);
 
-  const closeStage = () => setStage(Stages.NULL);
+  const closeStage = () => {
+    setStage(Stages.NULL);
+    setStageProps(null);
+  };
 
   return (
     <StageContext.Provider value={{ stage, setStage, stageIsActive: Boolean(stage), closeStage }}>
-      {children} {stage && <ContentManager stage={stage} />}
+      {children} {stage && <ContentManager stage={stage} props={stageProps}  />}
     </StageContext.Provider>
   );
 };
